@@ -1,0 +1,768 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial;
+  /* color: white; */
+}
+
+.split.left{
+  height: 100%;
+  width: 40%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  left: 0;
+}
+
+.split.right{ 
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  right: 0;
+  background-color: rgb(138, 179, 245);
+}
+
+.decoration{
+  background-color: rgb(138, 179, 245);
+}
+
+
+/* .centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+} */
+
+/* .centered form {
+  width: 100px;
+  border-radius: 20%;
+}  */
+
+div {
+margin-bottom: 15px;
+padding: 4px 12px;
+}
+
+.danger {
+background-color: #e590b2;
+border-left: 6px solid #f20688;
+}
+
+/* .success {
+background-color: #ddffdd;
+border-left: 6px solid #04AA6D;
+}
+
+.info {
+background-color: #e7f3fe;
+border-left: 6px solid #2196F3;
+}
+
+
+.warning {
+background-color: #ffffcc;
+border-left: 6px solid #ffeb3b;
+} */
+</style>
+</head>
+<body>
+
+<div class="note"> 
+    <!-- <div class="centered"> -->
+
+        <h1>Update Task</h1>
+        
+        <h3>Points to check before clicking "Submit" button</h3>
+        <div class="danger">
+          <p><strong>Date Fields!</strong> Ensure date related details are not empty including <b>(mm/dd/yyyy)</b> (i.e., Follow up Date)</b></p>
+        </div> 
+
+
+
+
+        <!-- <div class="success">
+        <p><strong>Success!</strong> Some text...</p>
+        </div>
+
+        <div class="info">
+        <p><strong>Info!</strong> Some text...</p>
+        </div>
+
+        <div class="warning">
+        <p><strong>Warning!</strong> Some text...</p>
+        </div> -->
+
+    <!-- </div> -->
+</div>
+
+<!-- <div class="split right">
+    <div class="centered"> -->
+<div class="decoration">
+
+  
+
+        
+
+    <form action="updaterecord/{{ mymember.id }}" method="post">
+        
+        
+        {% csrf_token %}            
+        <b>Call Type:</b><br> 
+         <!-- to make our dropdown remember what is entered last time -->
+        {% if mymember.call_Type == "Calling" %}
+          <select name="call_Type" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="Calling" selected>Calling</option>
+            <option value="Non Calling">Non Calling</option>
+          </select>
+        {% elif mymember.call_Type == "Non Calling" %}
+          <select name="call_Type" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="Calling" >Calling</option>
+            <option value="Non Calling" selected>Non Calling</option>
+          </select>
+        {% else %}
+          <select name="call_Type" style="width: 300px;">
+              <option value='' disabled style='display:none;' selected>Please Choose</option>
+              <option value="Calling" >Calling</option>
+              <option value="Non Calling" >Non Calling</option>
+          </select>
+        {% endif %}            
+        <br><br>
+<!-- to make our dropdown remember what is entered last time -->
+        <b>Account Status:</b><br> 
+         
+        {% if mymember.account_Status == "Completed" %}
+          <select name="account_Status" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="Completed" selected>Completed</option>
+            <option value="In-process">In-process</option>
+            <option value="Pending" >Pending</option>
+            <option value="Clarification">Clarification</option>
+          </select>
+        {% elif mymember.account_Status == "Pending" %}
+          <select name="account_Status" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="In-process" >In-process</option>
+            <option value="Pending" selected>Pending</option>
+            <option value="Completed" >Completed</option>
+            <option value="Clarification" >Clarification</option>
+          </select>
+        {% elif mymember.account_Status == "In-process" %}
+          <select name="account_Status" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="Pending" >Pending</option>
+            <option value="In-process" selected>In-process</option>
+            <option value="Completed">Completed</option>
+            <option value="Clarification" >Clarification</option>
+          </select>
+        {% elif mymember.account_Status == "Clarification" %}
+          <select name="account_Status" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="In-process" >In-process</option>
+            <option value="Clarification" selected>Clarification</option>
+            <option value="Completed" >Completed</option>
+            <option value="Pending" >Pending</option>
+          </select>
+        {% else %}
+          <select name="account_Status" style="width: 300px;">
+              <option value='' disabled style='display:none;' selected>Please Choose</option>
+              <option value="Clarification" >Clarification</option>
+              <option value="In-process" >In-process</option>
+              <option value="Pending" >Pending</option>
+              <option value="Completed" selected>Completed</option>
+          </select>
+        {% endif %}            
+        <br><br>
+        
+        <b>Disposition:</b><br>
+        <!-- <input name="disposition" value="{{ mymember.disposition }}" style="width: 300px;"/> -->
+        {% if mymember.disposition == "Patient" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" selected>Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted" >Submitted</option>
+            <option value="Payment Pending" >Payment Pending</option>
+            <option value="Ready to Submit" >Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" >AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>                        
+          </select>
+        {% elif mymember.disposition == "Medical Records/Appeal in Process" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" selected>Medical Records/Appeal in Process</option>
+            <option value="Submitted" >Submitted</option>
+            <option value="Payment Pending" >Payment Pending</option>
+            <option value="Ready to Submit" >Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" >AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "Submitted" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted" selected>Submitted</option>
+            <option value="Payment Pending" >Payment Pending</option>
+            <option value="Ready to Submit" >Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" >AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "Payment Pending" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending" selected>Payment Pending</option>
+            <option value="Ready to Submit" >Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" >AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "Ready to Submit" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit" selected>Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" >AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "AMED Review - Coding Handoff" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff" selected>AMED Review - Coding Handoff</option>
+            <option value="From WFH" >From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "From WFH" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH" selected>From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" >Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "Cur-Review-MedRec/Authorization" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization" selected>Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" >ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "ERA Payer Denied" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied" selected>ERA Payer Denied</option>
+            <option value="Medical Record Sent" >Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "Medical Record Sent" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent" selected>Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" >AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "AMED Review-Insurance contaced" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent">Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced" selected>AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" >CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select>
+        {% elif mymember.disposition == "CUR Review Appeal" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent">Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced">AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal" selected>CUR Review Appeal</option>
+            <option value="To WFH" >To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select> 
+        {% elif mymember.disposition == "To WFH" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent">Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced">AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal">CUR Review Appeal</option>
+            <option value="To WFH" selected>To WFH</option>
+            <option value="Manual payment denial" >Manual payment denial</option>
+          </select> 
+        {% elif mymember.disposition == "Manual payment denial" %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' >Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent">Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced">AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal">CUR Review Appeal</option>
+            <option value="To WFH">To WFH</option>
+            <option value="Manual payment denial" selected>Manual payment denial</option>
+          </select> 
+        {% else %}
+          <select name="disposition" style="width: 300px;">
+            <option value='' disabled style='display:none;' selected>Please Choose</option>
+            <option value="Patient" >Patient</option>
+            <option value="Medical Records/Appeal in Process" >Medical Records/Appeal in Process</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Ready to Submit">Ready to Submit</option>
+            <option value="AMED Review - Coding Handoff">AMED Review - Coding Handoff</option>
+            <option value="From WFH">From WFH</option>
+            <option value="Cur-Review-MedRec/Authorization">Cur-Review-MedRec/Authorization</option>
+            <option value="ERA Payer Denied">ERA Payer Denied</option>
+            <option value="Medical Record Sent">Medical Record Sent</option>
+            <option value="AMED Review-Insurance contaced">AMED Review-Insurance contaced</option>
+            <option value="CUR Review Appeal">CUR Review Appeal</option>
+            <option value="To WFH">To WFH</option>
+            <option value="Manual payment denial">Manual payment denial</option>
+          </select>
+        {% endif %}
+        <br><br>
+
+        <b>Denial Code:</b><br>
+        <!-- <input name="denial_Code" value="{{ mymember.denial_Code }}" style="width: 300px;"/> -->
+        {% if mymember.denial_Code == "197" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" selected>197</option>
+            <option value="22">22</option>
+            <option value="V55">V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>                        
+          </select>
+        {% elif mymember.denial_Code == "22" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" selected>22</option>
+            <option value="V55">V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "V55" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" 31>V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "272" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272" selected>272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "151" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151" selected>151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "27" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27" selected>27</option>
+            <option value="31" >31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "31" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31" selected>31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "OA 23" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23" selected>OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "288" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288" selected>288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "222" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222" selected>222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "109" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109" selected>109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "127" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127" selected>127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% elif mymember.denial_Code == "M29" %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55" >V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29" selected>M29</option>
+          </select>  
+        {% else %}
+          <select name="denial_Code" style="width: 300px;">
+            <option value='' disabled style='display:none;' selected>Please Choose</option>
+            <option value="197" >197</option>
+            <option value="22" >22</option>
+            <option value="V55">V55</option>
+            <option value="272">272</option>
+            <option value="151">151</option>
+            <option value="27">27</option>
+            <option value="31">31</option>
+            <option value="OA 23">OA 23</option>
+            <option value="288">288</option>
+            <option value="222">222</option>
+            <option value="109">109</option>
+            <option value="127">127</option>
+            <option value="M29">M29</option>
+          </select>
+        {% endif %}
+        <br><br>
+
+        <b>Step:</b><br>
+        <input name="step" value="{{ mymember.step }}" style="width: 300px;"/>
+        <br><br>
+
+        <b>Next_Best_Action_For_Success_Rate:</b><br>
+        <input name="next_Best_Action_For_Success_Rate" value="{{ mymember.next_Best_Action_For_Success_Rate }}" style="width: 300px;"/>
+        <br><br>
+
+        <b>Follow_up_Date:</b><br>
+        <input type="date" name="follow_up_Date" value="{{ mymember.follow_up_Date|date:'Y-m-d' }}" style="width: 300px;"/>
+        <br><br>
+
+        <label for="comment"><b>Follow_up_Comments:</b></label><br>
+        <textarea id="comment" name="follow_up_Comments" rows="5" cols="40">
+          {{ mymember.follow_up_Comments }}
+        </textarea>
+        <br><br>
+
+        <b>Final_Status:</b><br>
+        {% if mymember.final_Status == "Open" %}
+          <select name="final_Status" style="width: 300px;">
+            <option value='' disabled style='display:none;'>Please Choose</option>
+            <option value="Open" selected>Open</option>
+            <option value="Closed">Closed</option>
+          </select>
+        {% elif mymember.final_Status == "Closed" %}
+          <select name="final_Status" style="width: 300px;">
+              <option value='' disabled style='display:none;'>Please Choose</option>
+              <option value="Open" >Open</option>
+              <option value="Closed" selected>Closed</option>
+          </select>
+        {% else %}
+          <select name="final_Status" style="width: 300px;">
+              <option value='' disabled style='display:none;' selected>Please Choose</option>
+              <option value="Open" >Open</option>
+              <option value="Closed" >Closed</option>
+          </select>
+        {% endif %}
+        <br><br>
+
+        <label for="status_history"><b>Status History:</b></label><br>
+        <textarea id="status_history" name="status_history" rows="10" cols="100" readonly>
+          {{ mymember.status_history }}
+        </textarea>
+        <br><br>
+        
+        
+
+
+        <b><input type="submit" value="Submit"></b>
+    </form>
+</div>
+    <!-- </div>
+</div> -->
+
+</body>
+</html>

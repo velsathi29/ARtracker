@@ -1,0 +1,849 @@
+{% load static %}
+
+<html>
+  <head>
+    
+    
+
+
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+      <script type="text/javascript" language="javascript" src="{% static 'TableFilter\tablefilter.js' %}"></script>  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/filtergrid.min.css"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_alternateRows.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_colOps.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_cookies.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_extensions.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_ezEditTable.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_fixedHeaders.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_gridLayout.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_highlightKeywords.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_loader.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_paging.min.js"></script>
+      <script src="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"></script>
+      <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+
+      
+      <!-- <script src="{% static 'TableFilter/tablefilter.js' %}"></script> -->
+      <script type="text/JavaScript" src="https://underscorejs.org/underscore-min.js"></script>
+      <!-- <link rel="stylesheet" type="text/css" href="{% static 'TableFilter/filtergrid.css' %}" /> -->
+
+      
+    
+
+
+
+    <script src="tablefilter/tablefilter.js"></script>
+    <link rel="stylesheet" type="text/css" href="tablefilter/tablefilter.css" />
+    <style>
+			
+      div.fw-container div.fw-body div.content {
+        margin-top: 5em;
+      }
+      
+      div.fw-body h1 {
+        display: none;
+      }
+      
+      div.fw-container {
+        z-index: 1;
+      }
+        
+          </style>
+  </head>
+  <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <!-- Load the plugin bundle. -->
+  <script type="text/javascript" language="javascript" src="{% static 'Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin\dist\excel-bootstrap-table-filter-bundle.js' %}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+  <script type="text/javascript" language="javascript" src="{% static 'Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin\dist\excel-bootstrap-table-filter-style.css' %}"></script>
+  <!-- <link rel="stylesheet" href="excel-bootstrap-table-filter-style.css" /> -->
+  <script type="text/javascript" language="javascript" src="{% static 'jQuery-Plugin-For-Bootstrap-Dropdown-Checkboxes-dropdownCheckboxes\src\dropdownCheckboxes.min.js' %}"></script>
+  <script type="text/javascript" language="javascript" src="{% static 'jQuery-Plugin-For-Bootstrap-Dropdown-Checkboxes-dropdownCheckboxes\src\dropdownCheckboxes.min.css' %}"></script> 
+  
+  <section class="alternate page-heading">
+    <div class="container">
+      
+      <p class="lead"></p>
+  </section>
+  <hr>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Table 1</h2>
+
+      
+
+
+
+
+      <table id="task_view" class="table table-bordered table-intel">
+        <thead>
+          <tr>
+            <th>Unique ID</th>
+            <th class="filter">Received</th>
+            <th class="filter">Client</th>
+            <th class="filter">Claim Status</th>
+            <th class="filter">Claim Number</th>
+            <th class="filter">Payer</th>
+            <th class="filter">Disposition</th>
+            <th class="filter">Final Status</th>
+            <th class="filter">Assigned To</th>
+            <th class="filter">Worked By</th>
+            <th class="filter">Worked On</th>
+            <th class="filter">Account Status</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in mymembers %}
+
+            <tr>
+                <td data-column-index="0" data-shown="true"><a href="update/{{ x.id }}">{{ x.id }}</a></td>
+                <td data-column-index="1" data-shown="true">{{ x.received|date:"m/d/Y"}}</td>
+                <td data-column-index="2" data-shown="true">{{ x.client }}</td>
+                <td data-column-index="3" data-shown="true">{{ x.claim_Status }}</td>
+                <td data-column-index="4" data-shown="true">{{ x.account_or_Claim_Number }}</td>
+                <td data-column-index="5" data-shown="true">{{ x.payer }}</td>
+                <td data-column-index="6" data-shown="true">{{ x.disposition }}</td>
+                <td id="finalstatus" data-column-index="7" data-shown="true">{{ x.final_Status }}</td>
+                <td data-column-index="8" data-shown="true">{{ x.assigned_To }}</td>
+                <td data-column-index="9" data-shown="true">{{ x.worked_By }}</td>
+                <td data-column-index="10" data-shown="true">{{ x.worked_On|date:"m/d/Y" }}</td>
+                <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td>
+                
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    
+    </div>
+  </div> 
+</div>
+
+
+    <script>
+       
+      $(function () {
+        // Apply the plugin 
+        $('#task_view').excelTableFilter({
+          columnSelector: '.filter',
+          // sort: true,                        
+          // search: true,                        
+          // captions: Object, 
+        });
+        
+      });
+    </script>
+
+    
+
+
+
+
+
+
+
+    <!-- <script>
+      document.querySelector('table thead tr').addEventListener('click', function() {
+        // code to toggle the .excelTableFilter() function
+        if (document.querySelector('table').classList.contains('excel-filtered')) {
+        // code to remove the .excelTableFilter() function
+        document.querySelector('table').classList.remove('excel-filtered');
+        document.querySelectorAll('table th').forEach(function(th) {
+            th.removeEventListener('click', stopPropagation);
+        });
+        } else {
+            // code to add the .excelTableFilter() function
+            document.querySelector('table').classList.add('excel-filtered');
+            document.querySelectorAll('table th').forEach(function(th) {
+                th.addEventListener('click', stopPropagation);
+            });
+        }
+        });
+
+
+
+
+      function stopPropagation(event) {
+    event.stopPropagation();
+    }
+
+    </script> -->
+
+</body>
+</html>
+   
+  
+
+
+     
+
+
+
+    
+  
+
+
+<!-- <script>
+
+// var filtersConfig = {
+//         base_path: 'static/TableFilter/',
+//         state: {
+//           types: ['local_storage'],
+//           filters: true,
+//           page_number: true,
+//           page_length: true,
+//           sort: true,
+//           columns_visibility: true,
+//           filters_visibility: true
+//         },
+//         paging: {
+//           results_per_page: ['Records: ', [10, 25, 50, 100]]
+//         },
+//         alternate_rows: true,
+//         btn_reset: true,
+//         rows_counter: true,
+//         loader: true,
+//         status_bar: true,
+//         col_0: 'multiple',
+//         col_1: 'select',
+//         col_2: 'checklist',
+//         col_widths: [
+//             '180px', '120px', '120px',
+//             '100px', '100px', '100px',
+//             '100px', '100px', '100px'
+//         ],
+//         col_types: [
+//             'string', 'string', 'number',
+//             'number', 'number', 'number',
+//             'number', 'number', 'number'
+//         ],
+//         extensions:[{
+//             name: 'sort'
+//           }, {
+//             name: 'colsVisibility',
+//             text: 'Hide columns:',
+//             enable_tick_all: true,
+//             btn_target_id: 'colsBtn'
+//         }, {
+//             name: 'filtersVisibility',
+//             target_id: 'fltsBtn'
+//         }]
+//     };
+//     var tf = new TableFilter('myTable', filtersConfig);
+//     tf.init();
+
+      var tf = new TableFilter('myTable', {
+      base_path: '/static/TableFilter/',
+      col_5: 'multiple',
+    });
+    tf.init(); 
+
+
+      </script> -->
+
+
+      <!-- <script language="javascript" type="text/javascript"> 
+    
+       
+      
+        
+          var tf = setFilterGrid("myTable"); 
+          tf.init();
+      </script>   -->
+
+<!-- </script> --> 
+      <!-- <script>
+        $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+      </script> -->
+
+
+
+
+<!-- <style>
+  table {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  overflow: auto;
+  overflow-y: overlay;
+}
+
+th,
+thead {
+  position: sticky;
+  top: 0;
+  border: 1px solid #dddddd;
+  background-color: #1f2d54;
+  text-align: center;
+  color: white;
+  table-layout: fixed;
+  word-break: break-word;
+  height: 45px;
+}
+
+.filter {
+  position: absolute;
+  width: 20vw;
+  height: 30vh;
+  display: none;
+  text-align: left;
+  font-size: small;
+  z-index: 9999;
+  overflow: auto;
+  background: #ffffff;
+  color: #1f2d54;
+  border: 1px solid #dddddd;
+}
+
+.filter input {
+  margin: 5px !important;
+  padding: 0 !important;
+  width: 10%;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<table style='padding: 8px;'>
+  <tr>
+    <th index=0>Unique ID
+      <div class="filter"></div>
+    </th>
+    <th index=1>Received
+      <div class="filter"></div>
+    </th>
+    <th index=2>Client
+      <div class="filter"></div>
+    </th>
+    <th index=3>Claim Status
+      <div class="filter"></div>
+    </th>
+    <th index=4>Claim Number
+      <div class="filter"></div>
+    </th>
+    <th index=5>Payer
+      <div class="filter"></div>
+    </th>
+    <th index=6>Disposition
+      <div class="filter"></div>
+    </th>
+    <th index=7>Final Status
+      <div class="filter"></div>
+    </th>
+    <th index=8>Assigned To
+      <div class="filter"></div>
+    </th>
+    <th index=9>Worked By
+      <div class="filter"></div>
+    </th>
+    <th index=10>Worked On
+      <div class="filter"></div>
+    </th>
+    <th index=11>Account Status
+      <div class="filter"></div>
+    </th>
+
+
+  </tr>
+
+  {% for x in mymembers %}
+
+        <tr>
+            <td data-column-index="0" data-shown="true"><a href="update/{{ x.id }}">{{ x.id }}</a></td>
+            <td data-column-index="1" data-shown="true">{{ x.received|date:"m/d/Y"}}</td>
+            <td data-column-index="2" data-shown="true">{{ x.client }}</td>
+            <td data-column-index="3" data-shown="true">{{ x.claim_Status }}</td>
+            <td data-column-index="4" data-shown="true">{{ x.account_or_Claim_Number }}</td>
+            <td data-column-index="5" data-shown="true">{{ x.payer }}</td>
+            <td data-column-index="6" data-shown="true">{{ x.disposition }}</td>
+            <td id="finalstatus" data-column-index="7" data-shown="true">{{ x.final_Status }}</td>
+            <td data-column-index="8" data-shown="true">{{ x.assigned_To }}</td>
+            <td data-column-index="9" data-shown="true">{{ x.worked_By }}</td>
+            <td data-column-index="10" data-shown="true">{{ x.worked_On|date:"m/d/Y" }}</td>
+            <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td>
+            
+            
+            
+        </tr>
+        {% endfor %}
+
+
+  <script>
+    $(document).ready(function() {
+  $("table th").click(function() {
+    showFilterOption(this);
+  });
+});
+
+var arrayMap = {};
+
+function showFilterOption(tdObject) {
+  var filterGrid = $(tdObject).find(".filter");
+
+  if (filterGrid.is(":visible")) {
+    filterGrid.hide();
+    return;
+  }
+
+  $(".filter").hide();
+
+  var index = 0;
+  filterGrid.empty();
+  var allSelected = true;
+  filterGrid.append(
+    '<div><input id="all" type="checkbox" style="width: 10% !important" checked>All</div>'
+  );
+
+  var $rows = $(tdObject).parents("table").find("tr");
+  var values = [];
+
+  $rows.each(function(ind, ele) {
+    if (ind > 0) {
+      var currentTd = $(ele).children()[$(tdObject).attr("index")];
+      if (!values.includes(currentTd.innerHTML)) {
+        values.push(currentTd.innerHTML);
+        var div = document.createElement("div");
+        div.classList.add("grid-item");
+        var str = $(ele).is(":visible") ? "checked" : "";
+        if ($(ele).is(":hidden")) {
+          allSelected = false;
+        }
+        div.innerHTML =
+          '<br><input type="checkbox" ' + str + " >" + currentTd.innerHTML;
+        filterGrid.append(div);
+        arrayMap[index] = ele;
+        index++;
+      }
+    }
+  });
+
+  if (!allSelected) {
+    filterGrid.find("#all").removeAttr("checked");
+  }
+
+  filterGrid.append(
+    '<div style="text-align: center"><input id="close" type="button" value="Close" style="width: 40%"/><input id="ok" type="button" value="Ok" style="width: 40%"/></div>'
+  );
+  filterGrid.show();
+
+  var $closeBtn = filterGrid.find("#close");
+  var $okBtn = filterGrid.find("#ok");
+  var $checkElems = filterGrid.find("input[type='checkbox']");
+  var $gridItems = filterGrid.find(".grid-item");
+  var $all = filterGrid.find("#all");
+
+  $closeBtn.click(function() {
+    filterGrid.hide();
+    return false;
+  });
+
+  $okBtn.click(function() {
+    filterGrid.find(".grid-item").each(function(ind, ele) {
+      if ($(ele).find("input").is(":checked")) {
+        $(arrayMap[ind]).show();
+      } else {
+        $(arrayMap[ind]).hide();
+      }
+    });
+    filterGrid.hide();
+    return false;
+  });
+
+  $checkElems.click(function(event) {
+    event.stopPropagation();
+  });
+
+  $gridItems.click(function(event) {
+    var chk = $(this).find("input[type='checkbox']");
+    $(chk).prop("checked", !$(chk).is(":checked"));
+  });
+
+  $all.change(function() {
+    var chked = $(this).is(":checked");
+    filterGrid.find(".grid-item [type='checkbox']").prop("checked", chked);
+  });
+
+  filterGrid.click(function(event) {
+    event.stopPropagation();
+  });
+
+  return filterGrid;
+}
+  </script> -->
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+</head>
+
+<body>
+
+  <html>
+    <head>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    </head>
+    <body>
+      <table id="data-table">
+        <tr>
+          <td>Category A</td>
+          <td><input type="number" id="value1" value="20"></td>
+        </tr>
+        <tr>
+          <td>Category B</td>
+          <td><input type="number" id="value2" value="30"></td>
+        </tr>
+        <tr>
+          <td>Category C</td>
+          <td><input type="number" id="value3" value="50"></td>
+        </tr>
+        <tr>
+          <td>Category D</td>
+          <td><input type="number" id="value4" value="50"></td>
+        </tr>
+      </table>
+      <canvas id="pie-chart"></canvas>
+      <script>
+        var table = document.getElementById("data-table");
+        var inputs = table.getElementsByTagName("input");
+        
+        for (var i = 0; i < inputs.length; i++) {
+          inputs[i].onchange = function() {
+            updateChart();
+          };
+        }
+        
+        var ctx = document.getElementById("pie-chart").getContext("2d");
+        var chart = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: ["Category A", "Category B", "Category C",, "Category D"],
+            datasets: [
+              {
+                data: [20, 30, 50, 50],
+                backgroundColor: [
+                  "#ff6384",
+                  "#36a2eb",
+                  "#cc65fe",
+                  "#cc65fe"
+                ],
+                hoverBackgroundColor: [
+                  "#ff6384",
+                  "#36a2eb",
+                  "#cc65fe",
+                  "#cc65fe"
+                ]
+              }
+            ]
+          }
+        });
+        
+        function updateChart() {
+          chart.data.datasets[0].data[0] = parseInt(document.getElementById("value1").value);
+          chart.data.datasets[0].data[1] = parseInt(document.getElementById("value2").value);
+          chart.data.datasets[0].data[2] = parseInt(document.getElementById("value3").value);
+          chart.data.datasets[0].data[3] = parseInt(document.getElementById("value4").value);
+          chart.update();
+        }
+      </script>
+    </body>
+  </html>
+
+
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!-- for check box like filter when i click table header (works only for one checkbox at a time) -->
+
+
+
+<!-- <!DOCTYPE html>
+
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<body>
+<table id="myTable">
+  <tr tyle = "background:rgb(8, 184, 237);">
+    <th onclick="showFilter(0)">Unique ID</th>
+    <th onclick="showFilter(1)">Received</th>
+    <th onclick="showFilter(2)">Client</th>
+    <th onclick="showFilter(3)">Claim Status</th>
+    <th onclick="showFilter(4)">Claim Number</th>
+    <th onclick="showFilter(5)">Payer</th>
+    <th onclick="showFilter(6)">Disposition</th>
+    <th onclick="showFilter(7)">Final Status</th>
+    <th onclick="showFilter(8)">Assigned To</th>
+    <th onclick="showFilter(9)">Worked By</th>
+    <th onclick="showFilter(10)">Worked On</th>
+    <th onclick="showFilter(11)">Account Status</th>
+    
+  </tr>
+  {% for x in mymembers %}
+
+        <tr>
+            <td data-column-index="0" data-shown="true"><a href="update/{{ x.id }}">{{ x.id }}</a></td>
+            <td data-column-index="1" data-shown="true">{{ x.received|date:"m/d/Y"}}</td>
+            <td data-column-index="2" data-shown="true">{{ x.client }}</td>
+            <td data-column-index="3" data-shown="true">{{ x.claim_Status }}</td>
+            <td data-column-index="4" data-shown="true">{{ x.account_or_Claim_Number }}</td>
+            <td data-column-index="5" data-shown="true">{{ x.payer }}</td>
+            <td data-column-index="6" data-shown="true">{{ x.disposition }}</td>
+            <td id="finalstatus" data-column-index="7" data-shown="true">{{ x.final_Status }}</td>
+            <td data-column-index="8" data-shown="true">{{ x.assigned_To }}</td>
+            <td data-column-index="9" data-shown="true">{{ x.worked_By }}</td>
+            <td data-column-index="10" data-shown="true">{{ x.worked_On|date:"m/d/Y" }}</td>
+            <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td>
+            
+            
+            
+        </tr>
+        {% endfor %}
+</table>
+
+<div id="filterContainer"></div>
+
+<script>
+var filterContainer = document.getElementById("filterContainer");
+var table = document.getElementById("myTable");
+var headerCells = table.getElementsByTagName("th");
+var rowData = [];
+var uniqueValues = [];
+
+// Get all the data from the table (i=1 - to leave header)
+for (var i = 1; i < table.rows.length; i++) {
+
+  // gives empty arrays (equal to no.of records except header) inside an array
+  rowData.push([]); 
+
+  // gives each column value as a strings of a row inside each array
+  for (var j = 0; j < table.rows[i].cells.length; j++) {
+    rowData[i - 1].push(table.rows[i].cells[j].innerHTML);
+  }
+}
+
+// Show the filter when a header cell is clicked
+function showFilter(colIndex) {
+  // Only show the filter for certain columns - mention index of column we want filter here
+  if (colIndex !== 1 && colIndex !== 2 && colIndex !== 3 && colIndex !== 5 && colIndex !== 6 && colIndex !== 7 && colIndex !== 8 && colIndex !== 10 && colIndex !== 11) {
+    return;
+  }
+
+  // Reset the filter container 
+  filterContainer.innerHTML = "";
+
+  // Get the unique values for the selected column
+  uniqueValues = [];
+  for (var i = 0; i < rowData.length; i++) {
+
+    // takes unique values of a row in a particular column and add if there is a new unique value observed
+    if (uniqueValues.indexOf(rowData[i][colIndex]) === -1) {
+      uniqueValues.push(rowData[i][colIndex]);
+    }
+  }
+
+  // Create checkboxes for the unique values
+  for (var i = 0; i < uniqueValues.length; i++) {
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = uniqueValues[i];
+    checkbox.checked = false;
+    checkbox.onclick = function() { applyFilter(colIndex, this); };
+
+    var label = document.createElement("label");
+    label.innerHTML = uniqueValues[i];
+
+    filterContainer.appendChild(checkbox);
+    filterContainer.appendChild(label);
+    filterContainer.appendChild(document.createElement("br"));
+  }
+}
+
+// Apply the filter when a checkbox is clicked
+function applyFilter(colIndex, checkbox) {
+  // Loop through all the rows and hide those that don't match the selected values
+  for (var i = 1; i < table.rows.length; i++) {
+    if (checkbox.checked && table.rows[i].cells[colIndex].innerHTML !== checkbox.value) {
+      table.rows[i].style.display = "none";
+    } else {
+      table.rows[i].style.display = "";
+    }
+  }
+
+  // Loop through all the header cells and check if all the checkboxes for that column are unchecked
+  for (var i = 0; i < headerCells.length; i++) {
+    var checkboxes = filterContainer.getElementsByTagName("input");
+    var checked = false;
+    for (var j = 0; j < checkboxes.length; j++) {
+      if (checkboxes[j].checked) {
+        checked = true;
+        break;
+      }
+    }
+    if (!checked) {
+      headerCells[i].style.backgroundColor = "red";
+    } else {
+      headerCells[i].style.backgroundColor = "";
+    }
+  }
+}
+</script>
+
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+      .filter-container {
+        position: absolute;
+        background-color: white;
+        border: 1px solid gray;
+        padding: 10px;
+      }
+      .filter-form {
+        display: flex;
+        flex-direction: column;
+      }
+      .filter-checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .filter-checkboxes input[type="checkbox"] {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="myTable">
+        <thead>
+        <tr>
+            <th class="filterable">Unique ID</th>
+            <th class="filterable">Client</th>
+            <th class="filterable">Received</th>
+            <th class="filterable">Client</th>
+            <th class="filterable">Claim Status</th>
+            <th class="filterable">Claim Number </th>
+            <th class="filterable">Payer</th>
+            <th class="filterable">Disposition</th>
+            <th class="filterable">Final Status</th>
+            <th class="filterable">Assigned To</th>
+            <th class="filterable">Worked By</th>
+            <th class="filterable">Worked On</th>
+            <th class="filterable">Client</th>
+            <th class="filterable">Account Status</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for x in mymembers %}
+
+            <tr>
+                <td data-column-index="0" data-shown="true"><a href="update/{{ x.id }}">{{ x.id }}</a></td>
+                <td data-column-index="1" data-shown="true">{{ x.received|date:"m/d/Y"}}</td>
+                <td data-column-index="2" data-shown="true">{{ x.client }}</td>
+                <td data-column-index="3" data-shown="true">{{ x.claim_Status }}</td>
+                <td data-column-index="4" data-shown="true">{{ x.account_or_Claim_Number }}</td>
+                <td data-column-index="5" data-shown="true">{{ x.payer }}</td>
+                <td data-column-index="6" data-shown="true">{{ x.disposition }}</td>
+                <td id="finalstatus" data-column-index="7" data-shown="true">{{ x.final_Status }}</td>
+                <td data-column-index="8" data-shown="true">{{ x.assigned_To }}</td>
+                <td data-column-index="9" data-shown="true">{{ x.worked_By }}</td>
+                <td data-column-index="10" data-shown="true">{{ x.worked_On|date:"m/d/Y" }}</td>
+                <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td>
+                
+                
+                
+            </tr>
+            {% endfor %}
+        
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+        $(".filterable").on("contextmenu", function(e) {
+          e.preventDefault();
+          var header = $(this);
+          var filterContainer = $("<div>").addClass("filter-container");
+          var filterForm = $("<form>").addClass("filter-form");
+          var filterCheckboxes = $("<div>").addClass("filter-checkboxes");
+          var index = header.index() + 1;
+
+          // Create checkboxes for each distinct value in the column
+          $("#myTable tbody tr td:nth-child(" + index + ")").each(function() {
+            var value = $(this).text();
+            var checkboxId = "filter-" + value.replace(/\W/g, "");
+            var checkbox = $("<input>").attr({
+              type: "checkbox",
+              id: checkboxId,
+              value: value
+            });
+            var label = $("<label>").attr("for", checkboxId).text(value);
+            filterCheckboxes.append(checkbox, label);
+          });
+
+          // Add submit button
+          var submitButton = $("<input>").attr({
+            type: "submit",
+            value: "Filter"
+          });
+          filterForm.append(filterCheckboxes, submitButton);
+          filterContainer.append(filterForm);
+
+          // Show filter interface
+          filterContainer.css({
+            top: e.pageY + "px",
+            left: e
+          });
+        })
+    });
+    </script>
+</body> -->
+
+
+
+
+
+<!-- <div class="hero-callout">
+  <div id="example_wrapper" class="dataTables_wrapper"><div class="dataTables_length" id="example_length"><label>Show <select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="example_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="example"></label></div><table id="example" class="display nowrap dataTable dtr-inline collapsed" style="width: 100%;" aria-describedby="example_info"><thead><tr><th class="sorting sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 104px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Name</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 170px;" aria-label="Position: activate to sort column ascending">Position</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 76px;" aria-label="Office: activate to sort column ascending">Office</th><th class="dt-body-right sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 28px;" aria-label="Age: activate to sort column ascending">Age</th><th class="dt-body-right sorting dtr-hidden" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 67px; display: none;" aria-label="Start date: activate to sort column ascending">Start date</th><th class="dt-body-right sorting dtr-hidden" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label="Salary: activate to sort column ascending">Salary</th></tr></thead><tbody><tr class="odd"><td class="dtr-control sorting_1" tabindex="0">Airi Satou</td><td>Accountant</td><td>Tokyo</td><td class="dt-body-right">33</td><td class="dt-body-right dtr-hidden" style="display: none;">11/28/2008</td><td class="dt-body-right dtr-hidden" style="display: none;">$162,700</td></tr><tr class="even"><td class="sorting_1 dtr-control">Angelica Ramos</td><td>Chief Executive Officer (CEO)</td><td>London</td><td class="dt-body-right">47</td><td class="dt-body-right dtr-hidden" style="display: none;">10/9/2009</td><td class="dt-body-right dtr-hidden" style="display: none;">$1,200,000</td></tr><tr class="odd"><td class="dtr-control sorting_1" tabindex="0">Ashton Cox</td><td>Junior Technical Author</td><td>San Francisco</td><td class="dt-body-right">66</td><td class="dt-body-right dtr-hidden" style="display: none;">1/12/2009</td><td class="dt-body-right dtr-hidden" style="display: none;">$86,000</td></tr><tr class="even"><td class="sorting_1 dtr-control">Bradley Greer</td><td>Software Engineer</td><td>London</td><td class="dt-body-right">41</td><td class="dt-body-right dtr-hidden" style="display: none;">10/13/2012</td><td class="dt-body-right dtr-hidden" style="display: none;">$132,000</td></tr><tr class="odd"><td class="sorting_1 dtr-control">Brenden Wagner</td><td>Software Engineer</td><td>San Francisco</td><td class="dt-body-right">28</td><td class="dt-body-right dtr-hidden" style="display: none;">6/7/2011</td><td class="dt-body-right dtr-hidden" style="display: none;">$206,850</td></tr><tr class="even"><td class="dtr-control sorting_1" tabindex="0">Brielle Williamson</td><td>Integration Specialist</td><td>New York</td><td class="dt-body-right">61</td><td class="dt-body-right dtr-hidden" style="display: none;">12/2/2012</td><td class="dt-body-right dtr-hidden" style="display: none;">$372,000</td></tr><tr class="odd"><td class="sorting_1 dtr-control">Bruno Nash</td><td>Software Engineer</td><td>London</td><td class="dt-body-right">38</td><td class="dt-body-right dtr-hidden" style="display: none;">5/3/2011</td><td class="dt-body-right dtr-hidden" style="display: none;">$163,500</td></tr><tr class="even"><td class="sorting_1 dtr-control">Caesar Vance</td><td>Pre-Sales Support</td><td>New York</td><td class="dt-body-right">21</td><td class="dt-body-right dtr-hidden" style="display: none;">12/12/2011</td><td class="dt-body-right dtr-hidden" style="display: none;">$106,450</td></tr><tr class="odd"><td class="sorting_1 dtr-control">Cara Stevens</td><td>Sales Assistant</td><td>New York</td><td class="dt-body-right">46</td><td class="dt-body-right dtr-hidden" style="display: none;">12/6/2011</td><td class="dt-body-right dtr-hidden" style="display: none;">$145,600</td></tr><tr class="even"><td class="dtr-control sorting_1" tabindex="0">Cedric Kelly</td><td>Senior Javascript Developer</td><td>Edinburgh</td><td class="dt-body-right">22</td><td class="dt-body-right dtr-hidden" style="display: none;">3/29/2012</td><td class="dt-body-right dtr-hidden" style="display: none;">$433,060</td></tr></tbody><tfoot><tr><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Position</th><th rowspan="1" colspan="1">Office</th><th class="dt-body-right" rowspan="1" colspan="1">Age</th><th class="dt-body-right dtr-hidden" rowspan="1" colspan="1" style="display: none;">Start date</th><th class="dt-body-right dtr-hidden" rowspan="1" colspan="1" style="display: none;">Salary</th></tr></tfoot></table><div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div><div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><a class="paginate_button previous disabled" aria-controls="example" aria-disabled="true" aria-role="link" data-dt-idx="previous" tabindex="-1" id="example_previous">Previous</a><span><a class="paginate_button current" aria-controls="example" aria-role="link" aria-current="page" data-dt-idx="0" tabindex="0">1</a><a class="paginate_button " aria-controls="example" aria-role="link" data-dt-idx="1" tabindex="0">2</a><a class="paginate_button " aria-controls="example" aria-role="link" data-dt-idx="2" tabindex="0">3</a><a class="paginate_button " aria-controls="example" aria-role="link" data-dt-idx="3" tabindex="0">4</a><a class="paginate_button " aria-controls="example" aria-role="link" data-dt-idx="4" tabindex="0">5</a><a class="paginate_button " aria-controls="example" aria-role="link" data-dt-idx="5" tabindex="0">6</a></span><a class="paginate_button next" aria-controls="example" aria-role="link" data-dt-idx="next" tabindex="0" id="example_next">Next</a></div></div>
+</div> -->

@@ -1,0 +1,1524 @@
+{% load static %}
+<!DOCTYPE html>
+<head> 
+    <meta charset="utf-8">
+    <title> 
+        Count Number of Completed and Pending Tasks
+    </title> 
+    <!-- <link rel=”stylesheet” href=”http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css”>
+
+    <link rel=”stylesheet” href=”css/hide_cols/hide_cols.css”> -->
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/demo.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&amp;display=swap">
+    <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+    <script type="text/javascript" language="javascript" src="{% static 'TableFilter\tablefilter.js' %}"></script>  
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/tablefilter.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/filtergrid.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_alternateRows.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_colOps.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_cookies.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_extensions.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_ezEditTable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_fixedHeaders.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_gridLayout.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_highlightKeywords.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Modules/tf_paging.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/JavaScript" src="https://underscorejs.org/underscore-min.js"></script>
+      
+<style>
+
+    * {
+    box-sizing: border-box;
+    }
+
+    #pieChart {
+    height: 30%;
+    width: 50%;
+    }
+
+    #task_view {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ddd;
+        font-size: small;
+    }
+    
+    #task_view th, #task_view td {
+        text-align: left;
+        padding: 12px;
+    }
+    
+    #task_view tr {
+        border-bottom: 1px solid #ddd;
+    }
+    
+    #task_view.header, #task_view tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* table {
+      margin: 0 auto;
+      margin-top: 20px;
+      width: 100%;
+      position: relative;
+      overflow: auto;
+      overflow-y: overlay;
+
+      
+    }
+    
+    th,
+    thead {
+      position: sticky;
+      top: 0;
+      border: 1px solid #dddddd;
+      background-color: #1f2d54;
+      text-align: center;
+      color: white;
+      table-layout: fixed;
+      word-break: break-word;
+      height: 45px;
+    } */
+    
+    .filter {
+      position: absolute;
+      width: 20vw;
+      height: 30vh;
+      display: none;
+      text-align: left;
+      font-size: small;
+      z-index: 9999;
+      overflow: auto;
+      background: #ffffff;
+      color: #1f2d54;
+      border: 1px solid #dddddd;
+    }
+    
+    .filter input {
+      margin: 5px !important;
+      padding: 0 !important;
+      width: 10%;
+    } 
+
+    .button-3 {
+    appearance: none;
+    background-color: #2ea44f;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    }
+
+    .button-3:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+    }
+
+    .button-3:hover {
+    background-color: #2c974b;
+    }
+
+    .button-3:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+    }
+
+    .button-3:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, .1);
+    color: rgba(255, 255, 255, .8);
+    cursor: default;
+    }
+
+    .button-3:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+    }
+
+    .button-85 {
+    padding: 0.6em 2em;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    }
+
+    .button-85:before {
+    content: "";
+    background: linear-gradient(
+        45deg,
+        #ff0000,
+        #ff7300,
+        #fffb00,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #7a00ff,
+        #ff00c8,
+        #ff0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+    }
+
+    @keyframes glowing-button-85 {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+    }
+
+    .button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+    }
+
+    input {
+    border-image-source: linear-gradient(rgba(0, 51, 102, 0.5), rgba(0, 0, 51, 0.5));
+    border-width: 5pt;
+    border-image-slice: 1;
+    }
+    </style>
+  <script>
+    function filterTable() {
+      // Get the input value
+      let input = document.getElementById("filterInput").value.toUpperCase();
+
+      // Get the table
+      let table = document.getElementById("task_view");
+
+      // Get the rows
+      let rows = table.getElementsByTagName("tr");
+
+      // Loop through all the rows
+      for (let i = 0; i < rows.length; i++) {
+        // Get the cells
+        let cells = rows[i].getElementsByTagName("td");
+
+        // Check if there are cells
+        if (cells.length > 0) {
+          let match = false;
+
+          // Loop through all the cells
+          for (let j = 0; j < cells.length; j++) {
+            // Check if the cell text matches the input value
+            if (cells[j].innerHTML.toUpperCase().indexOf(input) > -1) {
+              match = true;
+              break;
+            }
+          }
+
+          // Hide or show the row depending on the match
+          if (match) {
+            rows[i].style.display = "";
+          } else {
+            rows[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+
+
+</head>
+<body>
+    
+
+    <div class="exportbuttons">
+
+        
+
+        <button  class="button-3" role="button"><a href="{% url 'export_users_xls' %}">Export all tasks in database</a></button>
+
+        
+        
+        <button class="button-85" role="button" onclick="ExportToExcel('xlsx')">Export filtered table to Excel</button>
+        
+    </div>  
+        
+        
+        <h1 style = "color:green;" > 
+        Tasks Alloted
+        </h1> 
+        <strong> 
+        Count Number of Completed and Pending Tasks
+        </strong>
+        
+        <br><br>
+        
+        <!-- <div id="container" style="width: 50%; height: 30%"></div>
+        <script>
+            anychart.onDocumentReady(function() {
+
+                // set the data
+                var data = [
+                    {x: "Completed", value: parseInt(10), exploded: true},
+                    {x: "Pending", value: parseInt(8)},
+                    {x: "In-process", value: parseInt(6)},
+                    {x: "Clarification", value: parseInt(5)},
+                    
+                ];
+
+                // create the chart
+                var chart = anychart.pie();
+
+                // set the chart title
+                chart.title("Account Status");
+
+                // add the data
+                chart.data(data);
+
+                // display the chart in the container
+                chart.container('container');
+                chart.draw();
+
+                // set legend position
+                chart.legend().position("right");
+                // set items layout
+                chart.legend().itemsLayout("vertical");
+                // sort elements
+                chart.sort("desc");
+
+                // chart.background().fill("silver");
+
+                });
+            
+        </script> -->
+
+
+<!-- <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+<script>
+
+    
+
+    var xValues = ["Completed", "Pending", "In-process", "Clarification"];
+    var yValues = [6,8,10,12] 
+    // [parseInt(document.getElementById("demo2").innerHTML), parseInt(document.getElementById("demo3").innerHTML), parseInt(document.getElementById("demo4").innerHTML), parseInt(document.getElementById("demo5").innerHTML)];
+    var barColors = [
+      "#b91d47",
+      "#00aba9",
+      "#2b5797",
+      "#e8c3b9",
+      "#1e7145"
+    ];
+    
+    new Chart("myChart", {
+      type: "doughnut",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data:yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Account Status"
+        }
+      }
+    });
+</script> -->
+
+
+
+
+<!-- <canvas id="myChart"></canvas>
+<script>
+    var dataTable = document.getElementById("counttable");
+    var data = [];
+    var labels = [];
+
+    for (var i = 1; i < dataTable.rows.length; i++) {
+    labels.push(dataTable.rows[i].cells[0].innerHTML);
+    data.push(dataTable.rows[i].cells[1].innerHTML);
+    }
+
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+        labels: labels,
+        datasets: [{
+        data: data,
+        backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56"
+        ],
+        hoverBackgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56"
+        ]
+        }]
+    }
+    });
+
+    dataTable.addEventListener("input", function() {
+    data = [];
+    labels = [];
+
+    for (var i = 1; i < dataTable.rows.length; i++) {
+        labels.push(dataTable.rows[i].cells[0].innerHTML);
+        data.push(dataTable.rows[i].cells[1].innerHTML);
+    }
+
+    myChart.data.labels = labels;
+    myChart.data.datasets[0].data = data;
+    myChart.update();
+    });
+</script> -->
+
+
+    
+    </body>
+    </html>
+    <div style="float: centre">
+   
+        <table id="counttable" border='1'>
+
+            <thead>
+            <tr style = "background:rgb(5, 249, 155);">
+                <th>Total Records</th>
+                           
+
+                <th>Completed</th>
+                
+                
+                <th>Pending</th>
+
+
+                <th>In-process</th>
+
+
+                <th>Clarification</th>
+
+
+                <th>None</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                
+                <td>
+                    <b><p id="demo1"></p></b>
+                </td>  
+                
+                <td id="td1">
+                    <b><p id="demo2"></p></b>
+                </td>
+
+                <td id="td2">
+                    <b><p id="demo3"></p></b>
+                </td>
+                
+                <td id="td3">
+                    <b><p id="demo4"></p></b>
+                </td>
+
+                <td id="td4">
+                    <b><p id="demo5"></p></b>
+                </td>
+
+                <td id="td5">
+                    <b><p id="demo6"></p></b>
+                </td>
+                
+                
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        
+      
+        <br>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<br>
+<input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search...">
+<br><br>
+<div class="container">
+    <!-- hide-cols -->
+<table class="table" id="task_view" style='padding: 8px;'>
+    <thead>
+    
+        <tr style = "background:rgb(8, 184, 237);">
+            <!-- <th onclick="sortTable(0)" index=0> sortTable() function to sort table ascending or descending by clicking table header is diabled as this slow-downed page performance -->
+                
+            <th  data-column-index="0" data-shown="true">Unique ID   
+            <!-- <div class="skip-filter"></div> -->
+            </th>
+            <th  data-column-index="1" data-shown="true">Received 
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="2" data-shown="true">Client                                          
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="3" data-shown="true">Claim Status                    
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="4" data-shown="true">Claim Number                    
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="5" data-shown="true">Payer                     
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="6" data-shown="true">Disposition                    
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="7" data-shown="true">Final Status                                         
+            <div class="filter"></div>
+            </th>  
+            <th data-column-index="8" data-shown="true">Assigned To                    
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="9" data-shown="true">Worked By                      
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="10" data-shown="true">Worked On                                        
+            <div class="filter"></div>
+            </th>
+            <th data-column-index="11" data-shown="true">Account Status                                       
+            <div class="filter"></div>
+            </th>
+            <!-- <th data-column-index="11" data-shown="true">Account Status                                       
+            <div class="filter"></div>
+            </th> -->
+
+
+            <!-- <th index=2>Service Date 
+            <div class="filter"></div>
+            </th>                
+            <th index=5>Charge $                                     
+            <div class="filter"></div>
+            </th>
+            <th index=6>Balance $                        
+            <div class="filter"></div>
+            </th>                
+            <th index=9>Upload Date                                         
+            <div class="filter"></div>
+            </th>
+            <th index=10>Allocation Date                      
+            <div class="filter"></div>
+            </th>
+            <th index=11>Call Type                                          
+            <div class="filter"></div>
+            </th>
+            <th index=12>Disposition                     
+            <div class="filter"></div>
+            </th>
+            <th index=13>Denial Code                                        
+            <div class="filter"></div>
+            </th>
+            <th index=14>Step                     
+            <div class="filter"></div>
+            </th>
+            <th index=15>Next Best Action                                       
+            <div class="filter"></div>
+            </th>              
+            <th index=18>Follow-up Date                     
+            <div class="filter"></div>
+            </th>
+            <th index=19>Follow-up Comments                                         
+            <div class="filter"></div>
+            </th> -->
+                            
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for x in mymembers %}
+
+        <tr>
+            <td data-column-index="0" data-shown="true"><a href="update/{{ x.id }}">{{ x.id }}</a></td>
+            <td data-column-index="1" data-shown="true">{{ x.received|date:"m/d/Y"}}</td>
+            <td data-column-index="2" data-shown="true">{{ x.client }}</td>
+            <td data-column-index="3" data-shown="true">{{ x.claim_Status }}</td>
+            <td data-column-index="4" data-shown="true">{{ x.account_or_Claim_Number }}</td>
+            <td data-column-index="5" data-shown="true">{{ x.payer }}</td>
+            <td data-column-index="6" data-shown="true">{{ x.disposition }}</td>
+            <td id="finalstatus" data-column-index="7" data-shown="true">{{ x.final_Status }}</td>
+            <td data-column-index="8" data-shown="true">{{ x.assigned_To }}</td>
+            <td data-column-index="9" data-shown="true">{{ x.worked_By }}</td>
+            <td data-column-index="10" data-shown="true">{{ x.worked_On|date:"m/d/Y" }}</td>
+            <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td>
+            <!-- <td data-column-index="11" data-shown="true">{{ x.account_Status }}</td> -->
+
+            <!-- <td>{{ x.service_Date|date:"m/d/Y" }}</td>              
+            <td>{{ x.charge_USD }}</td>
+            <td>{{ x.balance_USD }}</td>           
+            <td>{{ x.upload_Date|date:"m/d/Y" }}</td>              
+            <td>{{ x.allocation_Date|date:"m/d/Y" }}</td>
+            <td>{{ x.call_Type }}</td>                      
+            <td>{{ x.denial_Code }}</td>
+            <td>{{ x.step }}</td>
+            <td>{{ x.next_Best_Action_For_Success_Rate }}</td>      
+            <td>{{ x.follow_up_Date|date:"m/d/Y" }}</td>
+            <td>{{ x.follow_up_Comments }}</td> -->
+            <!-- <td>{{ x.status_history }}</td> -->
+            
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+   <!-- <ul><li></li></ul> here -->
+
+</div>
+<!-- <script language="javascript" type="text/javascript"> 
+    
+       
+      
+        
+    var tf = setFilterGrid("task_view"); 
+    tf.init();
+</script>  -->
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    (function($) {
+
+    $.fn.ddTableFilter = function(options) {
+    options = $.extend(true, $.fn.ddTableFilter.defaultOptions, options);
+    
+    return this.each(function() {
+        if($(this).hasClass('ddtf-processed')) {
+        refreshFilters(this);
+        return;
+        }
+        var table = $(this);
+        var start = new Date();
+    
+        $('th:visible', table).each(function(index) {
+        if($(this).hasClass('skip-filter')) return;
+        var selectbox = $('<select class="form-control">');
+        var values = [];
+        var opts = [];
+        selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
+    
+        var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function() {
+            var cellVal = options.valueCallback.apply(this);
+            if(cellVal.length == 0) {
+            cellVal = '--empty--';
+            }
+            $(this).attr('ddtf-value', cellVal);
+    
+            if($.inArray(cellVal, values) === -1) {
+            var cellText = options.textCallback.apply(this);
+            if(cellText.length == 0) {cellText = options.emptyText;}
+            values.push(cellVal);
+            opts.push({val:cellVal, text:cellText});
+            }
+        });
+        if(opts.length < options.minOptions){
+            return;
+        }
+        if(options.sortOpt) {
+            opts.sort(options.sortOptCallback);
+        }
+        $.each(opts, function() {
+            $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
+        });
+    
+        $(this).wrapInner('<div style="display:none">');
+        $(this).append(selectbox);
+    
+        selectbox.bind('change', {column:col}, function(event) {
+            var changeStart = new Date();
+            var value = $(this).val();
+    
+            event.data.column.each(function() {
+            if($(this).attr('ddtf-value') === value || value == '--all--') {
+                $(this).removeClass('ddtf-filtered');
+            }
+            else {
+                $(this).addClass('ddtf-filtered');
+            }
+            });
+            var changeStop = new Date();
+            if(options.debug) {
+            console.log('Search: ' + (changeStop.getTime() - changeStart.getTime()) + 'ms');
+            }
+            refreshFilters(table);
+    
+        });
+        table.addClass('ddtf-processed');
+        if($.isFunction(options.afterBuild)) {
+            options.afterBuild.apply(table);
+        }
+        });
+    
+        function refreshFilters(table) {
+        var refreshStart = new Date();
+        $('tr', table).each(function() {
+            var row = $(this);
+            if($('td.ddtf-filtered', row).length > 0) {
+            options.transition.hide.apply(row, options.transition.options);
+            }
+            else {
+            options.transition.show.apply(row, options.transition.options);
+            }
+        });
+    
+        if($.isFunction(options.afterFilter)) {
+            options.afterFilter.apply(table);
+        }
+    
+        if(options.debug) {
+            var refreshEnd = new Date();
+            console.log('Refresh: ' + (refreshEnd.getTime() - refreshStart.getTime()) + 'ms');
+        }
+        }
+    
+        if(options.debug) {
+        var stop = new Date();
+        console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
+        }
+    });
+    };
+    
+    $.fn.ddTableFilter.defaultOptions = {
+    valueCallback:function() {
+        return encodeURIComponent($.trim($(this).text()));
+    },
+    textCallback:function() {
+        return $.trim($(this).text());
+    },
+    sortOptCallback: function(a, b) {
+        return a.text.toLowerCase() > b.text.toLowerCase();
+    },
+    afterFilter: null,
+    afterBuild: null,
+    transition: {
+        hide:$.fn.hide,
+        show:$.fn.show,
+        options: []
+    },
+    emptyText:'--Empty--',
+    sortOpt:true,
+    debug:false,
+    minOptions:2
+    }
+    
+    })(jQuery);
+    
+
+
+    $('table').ddTableFilter();
+</script>
+
+
+
+
+
+
+
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"> </script>
+    
+    
+    <script>
+
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('task_view');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('ARdailytracker(filtered).' + (type || 'xlsx')));
+            }
+
+    </script>
+            
+   
+
+<div id="show"></div>
+
+</div>
+
+        
+</script>
+
+<script language="JavaScript">
+    
+    function countRecords() {
+
+        var rowCount = 0;
+        var table = document.getElementById("task_view");
+        var rows = table.getElementsByTagName("tr") //takes each row in a list
+    
+        for (var i = 0; i < rows.length; i++) {
+        if (rows[i].style.display == 'none') continue; // goes for for loop without adding rowCount if row is in hide state 
+        if (rows[i].getElementsByTagName("td").length > 0) {
+            rowCount++;            
+        }
+        }        
+        document.getElementById("demo1").innerHTML =  rowCount ;
+        document.getElementById("cell5").innerHTML =  rowCount ;
+        
+    }
+</script>
+
+<script>
+    function countRows() {
+      var comp_count = 0;
+      var pend_count = 0;            
+      var inpro_count = 0;
+      var clar_count = 0;
+      var none_count = 0;
+      var table = document.getElementById("task_view");      
+      var rows = table.getElementsByTagName("tr");
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if (row.style.display == 'none') {
+        continue;
+        }
+        var cells = row.getElementsByTagName("td");    
+
+        if (cells.length > 0 && cells[11].innerHTML == "Completed") {
+            comp_count++;
+        } else if (cells.length > 0 && cells[11].innerHTML =="Pending"){
+            pend_count++;
+        } else if (cells.length > 0 && cells[11].innerHTML =="In-process"){
+            inpro_count++;
+        } else if (cells.length > 0 && cells[11].innerHTML=="Clarification"){
+            clar_count++;
+        } else if (cells.length > 0 && cells[11].innerHTML!=="Completed" && cells[11].innerHTML!=="Pending" && cells[11].innerHTML!=="In-process" && cells[11].innerHTML!=="Clarification"){
+            none_count++;
+        }
+      }
+      document.getElementById("demo2").innerHTML =  comp_count ;
+      
+      document.getElementById("demo3").innerHTML =  pend_count ;
+      
+      document.getElementById("demo4").innerHTML =  inpro_count ;
+      
+      document.getElementById("demo5").innerHTML =  clar_count ;
+      
+      document.getElementById("demo6").innerHTML =  none_count ;
+
+
+
+
+
+      document.getElementById("cell1").innerHTML =  comp_count ;
+      
+      document.getElementById("cell2").innerHTML =  pend_count ;
+      
+      document.getElementById("cell3").innerHTML =  inpro_count ;
+      
+      document.getElementById("cell4").innerHTML =  clar_count ;
+      
+      document.getElementById("cell6").innerHTML =  none_count ;
+    }
+ 
+</script>
+
+
+
+
+<script type="text/javascript">
+
+    let livecount = $("#task_view td:contains('Open')").length;
+    let deadcount = $("#task_view td:contains('Closed')").length;
+    console.log("Live: " + livecount + ", Dead: " + deadcount);
+</script>
+
+
+<!-- script function which runs following two function to give us count of records when our page loads -->
+<script>
+    function startUpFunctions() {
+        countRows();
+        countRecords();
+        
+        }
+        window.onload = function() {
+        startUpFunctions();
+        };
+</script>
+
+<!-- script function which runs following two function to give us count of records whenever a change (filter here) is made to 'task_view' table -->
+<script>
+    $(document).ready(function() {
+      // Detect changes in the HTML table
+      $('#task_view').on('change', function() {
+        // Trigger the refresh of the count table
+        countRows();
+        countRecords();
+      });
+    });
+
+  </script>
+
+<script>
+const td1 = document.getElementById("td1");
+const td2 = document.getElementById("td2");
+const td3 = document.getElementById("td3");
+const cell1 = document.getElementById("cell1");
+const cell2 = document.getElementById("cell2");
+const cell3 = document.getElementById("cell3");
+
+</script>
+
+<!-- for piechart based on our counttable -->
+<table id="datatable" border='1'>
+
+    <thead>
+        <tr style = "background:rgb(5, 249, 155);">
+          <th><b>Status Type</b></th>
+          <th><b>Count</b></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>Total</td>
+          <td id="cell5">0</td>
+          <!-- dont use any tag inside <td></td> including<b>,<p> affects charts -->
+        </tr>
+        <tr>
+          <td>None</td>
+          <td id="cell6">0</td>
+        </tr>
+        <tr>
+          <td>Completed</td>
+          <td id="cell1">0</td>
+        </tr>
+        <tr>
+          <td>Pending</td>
+          <td id="cell2">0</td>
+        </tr>
+        <tr>
+          <td>Inprocess</td>
+          <td id="cell3">0</td>
+        </tr>
+        <tr>
+          <td>Clarification</td>
+          <td id="cell4">0</td>
+        </tr>
+        
+    </tbody>
+</table>
+
+  
+  <canvas id="pieChart"></canvas>
+  <!-- <div id="pieChart" style="width: 50%; height: 30%"></div> -->
+  <script>
+  var dataTable = document.getElementById("datatable");
+  var ctx = document.getElementById("pieChart").getContext("2d");
+  var pieChart = null;
+  
+  function updatePieChart() {
+    var data = [];
+    var labels = [];
+  
+    var dataTableRows = dataTable.getElementsByTagName("tr");
+    
+  
+    for (var i = 3; i < dataTableRows.length; i++) {
+      var dataTableRow = dataTableRows[i];
+      var dataTableRowCells = dataTableRow.getElementsByTagName("td");
+  
+      if (dataTableRowCells.length > 1) {
+        labels.push(dataTableRowCells[0].innerHTML);
+        data.push(parseInt(dataTableRowCells[1].innerHTML));
+      }
+    }
+  
+    if (pieChart) {
+      pieChart.destroy();
+    }
+  
+    pieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#00BFFF",
+            "#F08080",
+            "#40E0D0",
+            "#ADD8E6",
+            "#E0FFFF"
+          ]
+        }]
+      },
+      options: {
+        responsive: false
+      }
+    });
+  }
+  
+  updatePieChart();
+  
+  dataTable.addEventListener("change", updatePieChart);
+  </script>
+
+
+
+<!-- <script>
+    var dataTable = document.getElementById("counttable");
+    var ctx = document.getElementById("pieChart").getContext("2d");
+    var pieChart = null;
+    
+    function updatePieChart() {
+      var data = [];
+      var labels = [];
+    
+      var dataTableRows = dataTable.getElementsByTagName("tr");
+      
+
+      for(i=1;i<5;i++){
+        var dataTableHeader = dataTable.getElementsByTagName("th");
+
+        var dataTableRow = dataTableRows[0];
+        var dataTableRowCells = dataTableRow.getElementsByTagName("td");
+
+        if (dataTableHeaderCells.length > 1) {
+          labels.push(dataTableHeaderCells[i].innerHTML);
+          data.push(parseInt(dataTableRowCells[i].innerHTML));
+        }
+
+      }
+    
+      if (pieChart) {
+        pieChart.destroy();
+      }
+    
+      pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: [
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#00BFFF",
+              "#F08080",
+              "#40E0D0",
+              "#ADD8E6",
+              "#E0FFFF"
+            ]
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+    
+    updatePieChart();
+    
+    dataTable.addEventListener("change", updatePieChart);
+    </script> -->
+
+
+  </body>
+  </html>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- DOUGHNUT 3D -->
+
+<!-- <html>
+<head>
+	<title>My first chart using FusionCharts Suite XT</title>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+	<script type="text/javascript">
+		FusionCharts.ready(function(){
+			var chartObj = new FusionCharts({
+    type: 'doughnut3d',
+    renderAt: 'chart-container',
+    width: '550',
+    height: '450',
+    dataFormat: 'json',
+    dataSource: {
+        "chart": {
+            "caption": "Split of Revenue by Product Categories",
+            "subCaption": "Last year",
+            "numberPrefix": "$",
+            "bgColor": "#ffffff",
+            "startingAngle": "310",
+            "showLegend": "1",
+            "defaultCenterLabel": "Total revenue: $64.08K",
+            "centerLabel": "Revenue from $label: $value",
+            "centerLabelBold": "1",
+            "showTooltip": "0",
+            "decimals": "0",
+            "theme": "fusion"
+        },
+        "data": [{
+            "label": "Food",
+            "value": "28504"
+        }, {
+            "label": "Apparels",
+            "value": "14633"
+        }, {
+            "label": "Electronics",
+            "value": "10507"
+        }, {
+            "label": "Household",
+            "value": "4910"
+        }]
+    }
+}
+);
+			chartObj.render();
+		});
+	</script>
+	</head>
+	<body>
+		<div id="chart-container">FusionCharts XT will load here!</div>
+	</body>
+</html> -->
+
+
+
+
+
+<!-- pie chart 3D -->
+
+
+<!-- <html>
+<head>
+	<title>My first chart using FusionCharts Suite XT</title>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+	<script type="text/javascript">
+		FusionCharts.ready(function(){
+			var chartObj = new FusionCharts({
+    type: 'pie3d',
+    renderAt: 'chart-container',
+    width: '450',
+    height: '300',
+    dataFormat: 'json',
+    dataSource: {
+        "chart": {
+            "caption": "Split of revenue by product categories",
+            "subCaption": "Last year",
+            "numberPrefix": "$",
+            "showPercentInTooltip": "0",
+            "decimals": "1",
+            "useDataPlotColorForLabels": "1",
+            //Theme
+            "theme": "fusion"
+        },
+        "data": [{
+            "label": "Food",
+            "value": "285040"
+        }, {
+            "label": "Apparels",
+            "value": "146330"
+        }, {
+            "label": "Electronics",
+            "value": "105070"
+        }, {
+            "label": "Household",
+            "value": "49100"
+        }]
+    }
+}
+);
+			chartObj.render();
+		});
+	</script>
+	</head>
+	<body>
+		<div id="chart-container">FusionCharts XT will load here!</div>
+	</body>
+</html> -->
+
+
+
+<!-- function to hide and unhide columns using checkbox -->
+
+<!-- <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+                const menu = document.getElementById('menu');
+                const table = document.getElementById('task_view');
+                const headers = [].slice.call(table.querySelectorAll('th'));
+                const cells = [].slice.call(table.querySelectorAll('th, td'));
+                const numColumns = headers.length;
+
+                const thead = table.querySelector('thead');
+                thead.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+
+                    const rect = thead.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    menu.style.top = `${y}px`;
+                    menu.style.left = `${x}px`;
+                    menu.classList.toggle('container__menu--hidden');
+
+                    document.addEventListener('click', documentClickHandler);
+                });
+
+                // Hide the menu when clicking outside of it
+                const documentClickHandler = function (e) {
+                    const isClickedOutside = !menu.contains(e.target);
+                    if (isClickedOutside) {
+                        menu.classList.add('container__menu--hidden');
+                        document.removeEventListener('click', documentClickHandler);
+                    }
+                };
+
+                const showColumn = function (index) {
+                    cells
+                        .filter(function (cell) {
+                            return cell.getAttribute('data-column-index') === `${index}`;
+                        })
+                        .forEach(function (cell) {
+                            cell.style.display = '';
+                            cell.setAttribute('data-shown', 'true');
+                        });
+
+                    menu.querySelectorAll(`[type="checkbox"][disabled]`).forEach(function (checkbox) {
+                        checkbox.removeAttribute('disabled');
+                    });
+                };
+
+                const hideColumn = function (index) {
+                    cells
+                        .filter(function (cell) {
+                            return cell.getAttribute('data-column-index') === `${index}`;
+                        })
+                        .forEach(function (cell) {
+                            cell.style.display = 'none';
+                            cell.setAttribute('data-shown', 'false');
+                        });
+                    // How many columns are hidden
+                    const numHiddenCols = headers.filter(function (th) {
+                        return th.getAttribute('data-shown') === 'false';
+                    }).length;
+                    if (numHiddenCols === numColumns - 1) {
+                        // There's only one column which isn't hidden yet
+                        // We don't allow user to hide it
+                        const shownColumnIndex = thead
+                            .querySelector('[data-shown="true"]')
+                            .getAttribute('data-column-index');
+
+                        const checkbox = menu.querySelector(
+                            `[type="checkbox"][data-column-index="${shownColumnIndex}"]`
+                        );
+                        checkbox.setAttribute('disabled', 'true');
+                    }
+                };
+
+                cells.forEach(function (cell, index) {
+                    cell.setAttribute('data-column-index', index % numColumns);
+                    cell.setAttribute('data-shown', 'true');
+                });
+
+                headers.forEach(function (th, index) {
+                    // Build the menu item
+                    const li = document.createElement('li');
+                    const label = document.createElement('label');
+                    const checkbox = document.createElement('input');
+                    checkbox.setAttribute('type', 'checkbox');
+                    checkbox.setAttribute('checked', 'true');
+                    checkbox.setAttribute('data-column-index', index);
+                    checkbox.style.marginRight = '.25rem';
+
+                    const text = document.createTextNode(th.textContent);
+
+                    label.appendChild(checkbox);
+                    label.appendChild(text);
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    li.appendChild(label);
+                    menu.appendChild(li);
+
+                    // Handle the event
+                    checkbox.addEventListener('change', function (e) {
+                        e.target.checked ? showColumn(index) : hideColumn(index);
+                        menu.classList.add('container__menu--hidden');
+                    });
+                });
+            });
+        
+    </script> -->
+
+
+
+
+
+
+<!-- function which order our records in ascending or descending based on the column when we click on header -->
+
+    <!-- <script>
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("task_view");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+        // Start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /* Loop through all table rows (except the
+        first, which contains table headers): */
+        for (i = 1; i < (rows.length - 1); i++) {
+            // Start by saying there should be no switching:
+            shouldSwitch = false;
+            /* Get the two elements you want to compare,
+            one from current row and one from the next: */
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            /* Check if the two rows should switch place,
+            based on the direction, asc or desc: */
+            if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                // If so, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+            }
+            } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                // If so, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+            }
+            }
+        }
+        if (shouldSwitch) {
+            /* If a switch has been marked, make the switch
+            and mark that a switch has been done: */
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            // Each time a switch is done, increase this count by 1:
+            switchcount ++;
+        } else {
+            /* If no switching has been done AND the direction is "asc",
+            set the direction to "desc" and run the while loop again. */
+            if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+            }
+        }
+        }
+    }
+    
+    </script> -->
+
+
+
+    <!-- <script>
+        function countStatus() {
+            var pend_rowCount = 0;
+            var comp_rowCount = 0;
+            var inpro_rowCount = 0;
+            var clar_rowCount = 0;
+            
+
+
+
+
+            
+            $("#task_view tr").each(function() {
+
+                
+
+                var value = $(this).find("td:nth-child(12)").html();
+                if (value=="Completed"||value=="completed"||value=="COMPLETED"){
+                    comp_rowCount++;
+                } else if (value=="PENDING"||value=="pending"||value=="Pending"){
+                    pend_rowCount++;
+                } else if (value=="In-process"||value=="IN PROCESS"||value=="in-process"||value=="in process"||value=="inprocess"||value=="Inprocess"||value=="In Process"){
+                    inpro_rowCount++;
+                } else if (value=="clarification"||value=="CLARIFICATION"||value=="Clarification"){
+                    clar_rowCount++;
+                }
+                
+            });
+                
+            // document.getElementById("demo2").innerHTML =  comp_rowCount ;
+            // document.getElementById("demo3").innerHTML =  pend_rowCount ;
+            // document.getElementById("demo4").innerHTML =  inpro_rowCount ;
+            // document.getElementById("demo5").innerHTML =  clar_rowCount ;
+            
+            
+            }
+    </script> -->
+
+
+
+
+
+    <!-- <ul id="menu" class="container__menu container__menu--hidden">
+    <li>
+        
+        
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="0" style="margin-right: 0.25rem;"> Unique ID </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="1" style="margin-right: 0.25rem;"> Received </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="2" style="margin-right: 0.25rem;"> Client </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="3" style="margin-right: 0.25rem;"> Claim Status </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="4" style="margin-right: 0.25rem;"> Claim Number </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="5" style="margin-right: 0.25rem;"> Payer </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="6" style="margin-right: 0.25rem;"> Disposition </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="7" style="margin-right: 0.25rem;"> Final Status </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="8" style="margin-right: 0.25rem;"> Assigned To </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="9" style="margin-right: 0.25rem;"> Worked By </label>
+        <label style="display: flex; align-items: center;"> <input type="checkbox" checked="true" data-column-index="10" style="margin-right: 0.25rem;"> Worked On </label>
+
+        
+    </li>
+</ul> -->

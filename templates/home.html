@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+   <b>Hi {{user.username}}!</b>
+   <br><br>
+
+
+
+   {% load static %}
+
+
+    <!-- CSS Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <!-- CSS Custom File -->
+    <link href="{% static 'res_assign/homepage.css' %}" rel="stylesheet">
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="admin/"><b>Home</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="Import_Excel_pandas/"><b>Tracker File Upload</b></a>
+                <a class="nav-item nav-link" href="topuser/"><b>Allocator Reference</b></a>
+                <a class="nav-item nav-link" href="taskalloted/"><b>Tasks Alloted</b></a>               
+                <a class="nav-item nav-link" href="view_detail/"><b>Detail Table</b></a>
+                <!-- <a class="nav-item nav-link" href="view_resource/"><b>Resource Table</b></a>
+                <a class="nav-item nav-link" href="res_assign/"><b>Resource Assignation Form</b></a>
+                <a class="nav-item nav-link" href="update_fields/"><b>Update Fields</b></a> -->
+                
+                <!-- <a class="nav-item nav-link active" href="admin/">Home<span class="sr-only">(current)</span></a> -->
+                <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+                <!-- <a class="nav-item nav-link" href="index/">File Upload</a> -->
+                <!-- <a class="nav-item nav-link" href="upload/">Tracker File Upload</a> -->
+            </div>
+        </div>
+    </nav>
+    
+    <br><br><br>
+
+    <center>
+    <h1 class="title1">AR DAILY TRACKER</h1>
+    </center>
+
+    <br><br><br>
+    <style>
+        .button {
+          border: black;
+          color: white;
+          padding: 6px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+        
+        .button1 {background-color: #4CAF50;} /* Green */
+        .button2 {background-color: #b8c5cd;} /* Blue */
+        </style>
+
+
+    <center>
+    <button class="button button2" type="submit"><p><a href="{% url 'logout' %}"><b>Log Out</b></a></p></button>
+    </center>
+{% else %}
+   <p>You are not logged in</p>
+   <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock %}
+
+

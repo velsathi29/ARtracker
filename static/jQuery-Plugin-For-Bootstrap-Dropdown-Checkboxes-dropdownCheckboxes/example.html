@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<title>jQuery dropdownCheckboxes Demos</title>
+<link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+<link rel="stylesheet" href="./src/dropdownCheckboxes.min.css">
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+    body { background-color:#f7f7f7}
+    .container { margin:150px auto; font-size:12px;}
+    </style>
+</head>
+
+<body>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/form/jQuery-Plugin-For-Bootstrap-Dropdown-Checkboxes-dropdownCheckboxes/">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+<div class='container'>
+  <h1>jQuery dropdownCheckboxes Demos</h1>
+  <BR>
+  <form class='myform'>
+    
+    <!--
+
+        When initializing, a hidden input is created within the div, with the "data-name" value as the
+        name of the input. That way, these can be used as any other form input.
+
+        When the values are saved, the value of the hidden is set to a JSON array of all ticked checkbox values.
+
+        Note that the checkboxes can be pre-checked on pageload, and the initializer will activate the UI appropriately.
+
+      -->
+    
+    <div class="dropdown cq-dropdown" data-name='statuses'>
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> Status <span class="caret"></span> </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdown1">
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='new' checked>
+            jQuery </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='pending'>
+            JavaScript </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='hold'>
+            AngularJS </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='published' checked>
+            React Native </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='spiked' checked>
+            Vue.js </label>
+        </li>
+        <li class='text-center'>
+          <button type='button' class='btn btn-xs btn-default clear close-dropdown' value='Clear'>Clear</button>
+          <button type='button' class='btn btn-xs btn-default save' value='Save'>Save</button>
+        </li>
+      </ul>
+    </div>
+    <BR>
+    
+    <!-- Multiple are cool, too -->
+    <div class="dropdown cq-dropdown" data-name='statuses'>
+      <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> Category <span class="caret"></span> </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdown1">
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='news' checked>
+            JavaScript </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='sports'>
+            React Native </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='opinion'>
+            jQuery Script </label>
+        </li>
+        <li>
+          <label class="radio-btn">
+            <input type="checkbox" value='life' checked>
+            AngularJS </label>
+        </li>
+        <li class='text-center'>
+          <button type='button' class='btn btn-xs btn-default clear close-dropdown' value='Clear'>Clear</button>
+          <button type='button' class='btn btn-xs btn-default save' value='Save'>Save</button>
+        </li>
+      </ul>
+    </div>
+    <BR>
+  </form>
+  <button type='button' class='btn btn-default btn-sm' onClick=" console.log( $('.myform').serialize() ) "> Console log current form values </button>
+</div>
+<BR>
+<HR>
+</div>
+<script>
+    $(function(){
+      $('.cq-dropdown').dropdownCheckboxes();
+    });
+    </script> 
+<script src="./src/dropdownCheckboxes.min.js"></script> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

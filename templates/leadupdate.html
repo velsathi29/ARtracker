@@ -1,0 +1,317 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial;
+  /* color: white; */
+}
+
+.split.left{
+  height: 100%;
+  width: 40%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  left: 0;
+}
+
+.split.right{
+  height: 96%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  right: 0;
+  background-color: rgb(138, 179, 245);
+}
+
+
+
+/* .centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+} */
+
+/* .centered form {
+  width: 100px;
+  border-radius: 20%;
+}  */
+
+div {
+margin-bottom: 15px;
+padding: 4px 12px;
+}
+
+.danger {
+background-color: #a2bbf0;
+border-left: 6px solid #0626f2;
+}
+
+.success {
+background-color: #b0d2fa;
+border-left: 6px solid #1105f4;
+}
+
+/*.info {
+background-color: #e7f3fe;
+border-left: 6px solid #2196F3;
+}
+
+
+.warning {
+background-color: #ffffcc;
+border-left: 6px solid #ffeb3b;
+} */
+</style>
+</head>
+<body>
+
+<div class="split left">
+    <div class="centered">
+
+        <h1>Update Allocation Detail</h1>
+        <h3>Points to check before clicking "Submit" button</h3>
+        <div class="danger">
+        <p><strong>Date Fields!</strong> Ensure date related details are not empty including <b>(mm/dd/yyyy)</b> (i.e., Received, Service_Date, Upload Date, Allocation Date)</b></p>
+        </div>
+
+        <!-- <div class="success">
+        <p><strong>Money Fields!</strong> Remove <b>"$"</b> and <b>","</b> sign  in <b>Charge $</b> and <b>Balance $</b> fields value...</p>
+        </div> -->
+
+        <!-- <div class="info">
+        <p><strong>Info!</strong> Some text...</p>
+        </div>
+
+        <div class="warning">
+        <p><strong>Warning!</strong> Some text...</p>
+        </div> -->
+
+    </div>
+</div>
+
+<div class="split right">
+    <div class="centered">
+
+        
+
+        <form name="myform" action="updaterecord/{{ mymember.id }}" method="post" onsubmit="DoSubmit();">
+            {% csrf_token %}
+            <b>Received:</b><br>
+            <!-- <input type="date" class="form-control" name="received" value="{{mymember.received | date:'mm/dd/yyyy'}}" formControlName="receivedDate" [(ngModel)]="mymember.received"> -->            
+            <input type="date" name="received" value="{{ mymember.received|date:'Y-m-d'}}" style="width: 300px;">
+            <br><br>
+            <b>Account_or_Claim_Number:</b><br>
+            <input name="account_or_Claim_Number" value="{{ mymember.account_or_Claim_Number }}" style="width: 300px;">
+            <br><br>
+            <b>Service_Date:</b><br>
+            <input type="date" name="service_Date" value="{{ mymember.service_Date|date:'Y-m-d'}}" style="width: 300px;">
+            <br><br>
+            <b>Payer:</b><br>
+            <input name="payer" value="{{ mymember.payer }}" style="width: 300px;">
+            <br><br>
+            <b>Claim_Status:</b><br>
+            <input name="claim_Status" value="{{ mymember.claim_Status }}" style="width: 300px;">
+            <br><br>
+            <b>Charge $:</b><br>
+            <input type="text"  name="charge_USD" value="{{ mymember.charge_USD }}" style="width: 300px;"> 
+            <br><br>
+            <b>Balance $:</b><br>
+            <input type="text"  name="balance_USD" value="{{ mymember.balance_USD }}" style="width: 300px;">
+            <br><br>
+            <b>Client:</b><br>
+            <input name="client" value="{{ mymember.client }}" style="width: 300px;">
+            <br><br>
+            <b>Assigned To:</b><br>
+            <input name="assigned_To" value="{{ mymember.assigned_To }}" style="width: 300px;">
+            <br><br>
+            <b>Upload Date:</b><br>
+            <input type="date" name="upload_Date" value="{{ mymember.upload_Date|date:'Y-m-d'}}" style="width: 300px;">
+            <br><br>
+            <b>Allocation Date:</b><br>
+            <input type="date" name="allocation_Date" value="{{ mymember.allocation_Date|date:'Y-m-d' }}" style="width: 300px;" readonly>
+            <br><br>
+            <input type="submit" value="Submit">
+            </form>
+            <!-- function to remove "$"" and "," from the input values while clicking "submit" button to avoid error -->
+            <script>
+              function DoSubmit(){
+                var a = document.myform.charge_USD.value
+                var b = document.myform.balance_USD.value
+                a=a.replace('$','').replace(',', '')
+                b=b.replace('$','').replace(',', '')
+                document.myform.charge_USD.value=a
+                document.myform.balance_USD.value=b
+              }
+            </script>
+
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+div {
+margin-bottom: 15px;
+padding: 4px 12px;
+}
+
+.danger {
+background-color: #ffdddd;
+border-left: 6px solid #f44336;
+}
+
+.success {
+background-color: #ddffdd;
+border-left: 6px solid #04AA6D;
+}
+
+/* .info {
+background-color: #e7f3fe;
+border-left: 6px solid #2196F3;
+}
+
+
+.warning {
+background-color: #ffffcc;
+border-left: 6px solid #ffeb3b;
+} */
+</style>
+</head>
+<body>
+
+<div class="split left">
+    <div class="centered">
+        <h1>Update Allocation Detail</h1>
+        <h3>Points to check before clicking "Submit" button</h3>
+        <div class="danger">
+        <p><strong>Date Fields!</strong> Ensure date related details are filled in <b>"YYYY-MM-DD"</b> format <b>(i.e., Received, Service_Date, Upload Date, Allocation Date)</b>...even if you see date like "Feb. 2, 2023",please change it into "2023-02-02" </p>
+        </div>
+
+        <div class="success">
+        <p><strong>Money Fields!</strong> Remove <b>"$"</b> sign before value in <b>Charge $</b> and <b>Balance $</b> fields...</p>
+        </div>
+
+        <div class="info">
+        <p><strong>Info!</strong> Some text...</p>
+        </div>
+
+        <div class="warning">
+        <p><strong>Warning!</strong> Some text...</p>
+        </div> -->
+
+    <!-- </div>
+</div>
+
+        
+
+<div class="split right">
+    <div class="centered">
+
+        
+
+        <form action="updaterecord/{{ mymember.id }}" method="post">
+            {% csrf_token %}
+            Received: (yyyy-mm-dd)<br>
+            <input name="received" value="{{ mymember.received}}">
+            <br><br>
+            Account_or_Claim_Number:<br>
+            <input name="account_or_Claim_Number" value="{{ mymember.account_or_Claim_Number }}">
+            <br><br>
+            Service_Date: (yyyy-mm-dd)<br>
+            <input name="service_Date" value="{{ mymember.service_Date}}">
+            <br><br>
+            Payer:<br>
+            <input name="payer" value="{{ mymember.payer }}">
+            <br><br>
+            Claim_Status:<br>
+            <input name="claim_Status" value="{{ mymember.claim_Status }}">
+            <br><br>
+            Charge $:<br>
+            <input name="charge_USD" value="{{ mymember.charge_USD }}"> 
+            <br><br>
+            Balance $:<br>
+            <input name="balance_USD" value="{{ mymember.balance_USD }}">
+            <br><br>
+            Client:<br>
+            <input name="client" value="{{ mymember.client }}">
+            <br><br>
+            Assigned To:<br>
+            <input name="assigned_To" value="{{ mymember.assigned_To }}">
+            <br><br>
+            Upload Date: (yyyy-mm-dd)<br>
+            <input name="upload_Date" value="{{ mymember.upload_Date}}">
+            <br><br>
+            Allocation Date: (yyyy-mm-dd)<br>
+            <input name="allocation_Date" value="{{ mymember.allocation_Date }}">
+            <br><br>
+            <input type="submit" value="Submit">
+            </form>
+
+    </div>
+</div>
+
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+<script>
+    // inputmask attribute to remove dollar sign while presenting using form (in charge USD & balance USD field) , |date:"Y-m-d"
+$(document).ready(function(){
+    $("input").inputmask();       
+  });
+</script> --> 

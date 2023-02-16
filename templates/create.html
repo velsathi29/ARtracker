@@ -1,0 +1,37 @@
+
+
+<html>
+<head>
+<title>AR DAILY TRACKER</title>
+</head>
+
+<body>
+<h1>Add Details</h1>
+<form action="" method="POST">
+{% csrf_token %}
+
+
+Received: <input type="date" name="received"/><br/>
+Claim: <input type="number" name="claim"/><br/>
+Service_Date: <input type="date" name="service_date"/><br/>
+Payers: <input type="text" name="payers"/><br/>
+Status: <input type="text" name="status"/><br/>
+Comments: <input type="text" name="comments"/><br/>
+Call_Type: <input type="text" name="call_type"/><br/>
+Disposition: <input type="text" name="disposition"/><br/>
+Denial_Code: <input type="text" name="denial_code"/><br/>
+Step <input type="text" name="step"/><br/>
+Worked_By: <input type="text" name="worked_by"/><br/>
+Worked_On: <input type="date" name="worked_on"/><br/>
+Follou_Up_Date: <input type="date" name="follow_up_date"/><br/>
+
+<input type="submit" value="Submit"/>
+</form>
+</body>
+
+</html>
+
+
+
+
+

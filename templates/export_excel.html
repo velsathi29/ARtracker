@@ -1,0 +1,7 @@
+{% load static %}
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools-items %}
+    <a class="btn btn-primary" id="export_excel" href="{{export_link}}" title="Export to Excel"><span class="fas fa-download"></span></a>
+    {{ block.super }}
+{% endblock %}

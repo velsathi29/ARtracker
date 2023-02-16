@@ -1,0 +1,519 @@
+{% load static %}
+<!DOCTYPE html>
+<style>
+    * {
+    box-sizing: border-box;
+    }
+
+    #task_view {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ddd;
+        font-size: small;
+    }
+    
+    #task_view th, #task_view td {
+        text-align: left;
+        padding: 12px;
+    }
+    
+    #task_view tr {
+        border-bottom: 1px solid #ddd;
+    }
+    
+    #task_view.header, #task_view tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* table {
+      margin: 0 auto;
+      margin-top: 20px;
+      width: 100%;
+      position: relative;
+      overflow: auto;
+      overflow-y: overlay;
+
+      
+    }
+    
+    th,
+    thead {
+      position: sticky;
+      top: 0;
+      border: 1px solid #dddddd;
+      background-color: #1f2d54;
+      text-align: center;
+      color: white;
+      table-layout: fixed;
+      word-break: break-word;
+      height: 45px;
+    } */
+    
+    .filter {
+      position: absolute;
+      width: 20vw;
+      height: 30vh;
+      display: none;
+      text-align: left;
+      font-size: small;
+      z-index: 9999;
+      overflow: auto;
+      background: #ffffff;
+      color: #1f2d54;
+      border: 1px solid #dddddd;
+    }
+    
+    .filter input {
+      margin: 5px !important;
+      padding: 0 !important;
+      width: 10%;
+    } 
+
+    .button-3 {
+    appearance: none;
+    background-color: #2ea44f;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    }
+
+    .button-3:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+    }
+
+    .button-3:hover {
+    background-color: #2c974b;
+    }
+
+    .button-3:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+    }
+
+    .button-3:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, .1);
+    color: rgba(255, 255, 255, .8);
+    cursor: default;
+    }
+
+    .button-3:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+    }
+
+    .button-85 {
+    padding: 0.6em 2em;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    }
+
+    .button-85:before {
+    content: "";
+    background: linear-gradient(
+        45deg,
+        #ff0000,
+        #ff7300,
+        #fffb00,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #7a00ff,
+        #ff00c8,
+        #ff0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+    }
+
+    @keyframes glowing-button-85 {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+    }
+
+    .button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+    }
+
+
+
+
+
+    
+
+    /* table {
+      
+      margin: 0 auto;
+      margin-top: 20px;
+      width: 100%;
+      position: relative;
+      overflow: auto;
+      overflow-y: overlay;
+    }
+    
+    th,
+    thead {
+      position: sticky;
+      top: 0;
+      border: 1px solid #dddddd;
+      background-color: #1f2d54;
+      text-align: center;
+      font-size: small;
+      color: white;
+      table-layout: fixed;
+      word-break: break-word;
+      height: 45px;
+    }
+    
+    .filter {
+      position: absolute;
+      width: 20vw;
+      height: 30vh;
+      display: none;
+      text-align: left;
+      font-size: small;
+      z-index: 9999;
+      overflow: auto;
+      background: #ffffff;
+      color: #1f2d54;
+      border: 1px solid #dddddd;
+    }
+    
+    .filter input {
+      margin: 5px !important;
+      padding: 0 !important;
+      width: 10%;
+    }  */
+    
+    </style>
+
+    <body>
+        <div class="exportbuttons">
+
+            <button class="button-85" role="button" onclick="ExportToExcel('xlsx')">Export filtered table to Excel</button>
+            
+        </div>
+        <br>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <table id="task_view" style='padding: 8px;'>
+        <tbody>
+            <tr style = "background:rgb(8, 184, 237);">
+                <th index=0>Received 
+                <div class="filter"></div>
+                </th>
+                <th index=1>Claim Number                    
+                <div class="filter"></div>
+                </th>
+                <th index=2>Service Date 
+                <div class="filter"></div>
+                </th>
+                <th index=3>Payer                     
+                <div class="filter"></div>
+                </th>
+                <th index=4>Claim Status                    
+                <div class="filter"></div>
+                </th>
+                <th index=5>Charge $                                     
+                <div class="filter"></div>
+                </th>
+                <th index=6>Balance $                        
+                <div class="filter"></div>
+                </th>
+                <th index=7>Client                                          
+                <div class="filter"></div>
+                </th>
+                <th index=8>Assigned To                    
+                <div class="filter"></div>
+                </th>
+                <th index=9>Upload Date                                         
+                <div class="filter"></div>
+                </th>
+                <th index=10>Allocation Date                      
+                <div class="filter"></div>
+                </th>
+                <th index=11>Call Type                                          
+                <div class="filter"></div>
+                </th>
+                <th index=12>Disposition                     
+                <div class="filter"></div>
+                </th>
+                <th index=13>Denial Code                                        
+                <div class="filter"></div>
+                </th>
+                <th index=14>Step                     
+                <div class="filter"></div>
+                </th>
+                <th index=15>Next Best Action                                       
+                <div class="filter"></div>
+                </th>
+                <th index=16>worked_By                      
+                <div class="filter"></div>
+                </th>
+                <th index=17>worked_On                                        
+                <div class="filter"></div>
+                </th>
+                <th index=18>Follow-up Date                     
+                <div class="filter"></div>
+                </th>
+                <th index=19>Follow-up Comments                                         
+                <div class="filter"></div>
+                </th>
+                <th index=20>Final Status                                         
+                <div class="filter"></div>
+                </th>                
+            </tr>
+
+        {% for x in mymembers %}
+
+            <tr>
+              <!-- <td><a href="update/{{ x.id }}">{{ x.id }}</a></td> -->
+              <td>{{ x.received|date:"m/d/Y"}}</td>
+              <td>{{ x.account_or_Claim_Number }}</td>
+              <td>{{ x.service_Date|date:"m/d/Y" }}</td>
+              <td>{{ x.payer }}</td>
+              <td>{{ x.claim_Status }}</td>
+              <td>{{ x.charge_USD }}</td>
+              <td>{{ x.balance_USD }}</td>
+              <td>{{ x.client }}</td>
+              <td>{{ x.assigned_To }}</td>
+              <td>{{ x.upload_Date|date:"m/d/Y" }}</td>              
+              <td>{{ x.allocation_Date|date:"m/d/Y" }}</td>
+              <td>{{ x.call_Type }}</td>
+              <td>{{ x.disposition }}</td>              
+              <td>{{ x.denial_Code }}</td>
+              <td>{{ x.step }}</td>
+              <td>{{ x.next_Best_Action_For_Success_Rate }}</td>
+              <td>{{ x.worked_By }}</td>
+              <td>{{ x.worked_On|date:"m/d/Y" }}</td>
+              <td>{{ x.follow_up_Date|date:"m/d/Y" }}</td>
+              <td>{{ x.follow_up_Comments }}</td>
+              <!-- <td>{{ x.status_history }}</td> -->
+              <td>{{ x.final_Status }}</td>
+              
+            </tr>
+          {% endfor %}
+    
+    
+    
+            
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        (function($) {
+
+        $.fn.ddTableFilter = function(options) {
+        options = $.extend(true, $.fn.ddTableFilter.defaultOptions, options);
+        
+        return this.each(function() {
+            if($(this).hasClass('ddtf-processed')) {
+            refreshFilters(this);
+            return;
+            }
+            var table = $(this);
+            var start = new Date();
+        
+            $('th:visible', table).each(function(index) {
+            if($(this).hasClass('skip-filter')) return;
+            var selectbox = $('<select class="form-control">');
+            var values = [];
+            var opts = [];
+            selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
+        
+            var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function() {
+                var cellVal = options.valueCallback.apply(this);
+                if(cellVal.length == 0) {
+                cellVal = '--empty--';
+                }
+                $(this).attr('ddtf-value', cellVal);
+        
+                if($.inArray(cellVal, values) === -1) {
+                var cellText = options.textCallback.apply(this);
+                if(cellText.length == 0) {cellText = options.emptyText;}
+                values.push(cellVal);
+                opts.push({val:cellVal, text:cellText});
+                }
+            });
+            if(opts.length < options.minOptions){
+                return;
+            }
+            if(options.sortOpt) {
+                opts.sort(options.sortOptCallback);
+            }
+            $.each(opts, function() {
+                $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
+            });
+        
+            $(this).wrapInner('<div style="display:none">');
+            $(this).append(selectbox);
+        
+            selectbox.bind('change', {column:col}, function(event) {
+                var changeStart = new Date();
+                var value = $(this).val();
+        
+                event.data.column.each(function() {
+                if($(this).attr('ddtf-value') === value || value == '--all--') {
+                    $(this).removeClass('ddtf-filtered');
+                }
+                else {
+                    $(this).addClass('ddtf-filtered');
+                }
+                });
+                var changeStop = new Date();
+                if(options.debug) {
+                console.log('Search: ' + (changeStop.getTime() - changeStart.getTime()) + 'ms');
+                }
+                refreshFilters(table);
+        
+            });
+            table.addClass('ddtf-processed');
+            if($.isFunction(options.afterBuild)) {
+                options.afterBuild.apply(table);
+            }
+            });
+        
+            function refreshFilters(table) {
+            var refreshStart = new Date();
+            $('tr', table).each(function() {
+                var row = $(this);
+                if($('td.ddtf-filtered', row).length > 0) {
+                options.transition.hide.apply(row, options.transition.options);
+                }
+                else {
+                options.transition.show.apply(row, options.transition.options);
+                }
+            });
+        
+            if($.isFunction(options.afterFilter)) {
+                options.afterFilter.apply(table);
+            }
+        
+            if(options.debug) {
+                var refreshEnd = new Date();
+                console.log('Refresh: ' + (refreshEnd.getTime() - refreshStart.getTime()) + 'ms');
+            }
+            }
+        
+            if(options.debug) {
+            var stop = new Date();
+            console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
+            }
+        });
+        };
+        
+        $.fn.ddTableFilter.defaultOptions = {
+        valueCallback:function() {
+            return encodeURIComponent($.trim($(this).text()));
+        },
+        textCallback:function() {
+            return $.trim($(this).text());
+        },
+        sortOptCallback: function(a, b) {
+            return a.text.toLowerCase() > b.text.toLowerCase();
+        },
+        afterFilter: null,
+        afterBuild: null,
+        transition: {
+            hide:$.fn.hide,
+            show:$.fn.show,
+            options: []
+        },
+        emptyText:'--Empty--',
+        sortOpt:true,
+        debug:false,
+        minOptions:2
+        }
+        
+        })(jQuery);
+        
+
+
+        $('table').ddTableFilter();
+    </script>
+
+
+
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"> </script>
+    
+    <script>
+
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('task_view');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('ARdailytracker(filtered).' + (type || 'xlsx')));
+            }
+
+    </script>
+    </body>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

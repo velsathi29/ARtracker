@@ -1,0 +1,354 @@
+{% load static %}
+<style>
+table {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  overflow: auto;
+  overflow-y: overlay;
+}
+
+th,
+thead {
+  position: sticky;
+  top: 0;
+  border: 1px solid #dddddd;
+  background-color: #1f2d54;
+  text-align: center;
+  color: white;
+  table-layout: fixed;
+  word-break: break-word;
+  height: 45px;
+}
+
+.filter {
+  position: absolute;
+  width: 20vw;
+  height: 30vh;
+  display: none;
+  text-align: left;
+  font-size: small;
+  z-index: 9999;
+  overflow: auto;
+  background: #ffffff;
+  color: #1f2d54;
+  border: 1px solid #dddddd;
+}
+
+.filter input {
+  margin: 5px !important;
+  padding: 0 !important;
+  width: 10%;
+}    
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<table style='padding: 8px;'>
+    <tbody>
+        <tr>
+            <th index=0>Email
+            <div class="filter"></div>
+            </th>
+            <th index=1>Name
+            <div class="filter"></div>
+            </th>
+            <th index=2>Level
+            <div class="filter"></div>
+            </th>
+            <th index=3>Location
+            <div class="filter"></div>
+            </th>
+        </tr>
+
+        <tr>
+            <td>Email 1</td>
+            <td>Name 1</td>
+            <td>Level 1</td>
+            <td>Location 2</td>
+        </tr>
+        <tr>
+            <td>Email 1</td>
+            <td>Name 1</td>
+            <td>Level 1</td>
+            <td>Location 1</td>
+        </tr>
+        <tr>
+            <td>Email 2</td>
+            <td>Name 1</td>
+            <td>Level 2</td>
+            <td>Location 1</td>
+        </tr>
+        <tr>
+            <td>Email 3</td>
+            <td>Name 2</td>
+            <td>Level 2</td>
+            <td>Location 1</td>
+        </tr>
+        <tr>
+            <td>Email 3</td>
+            <td>Name 3</td>
+            <td>Level 1</td>
+            <td>Location 2</td>
+        </tr>
+        <tr>
+            <td>Email 1</td>
+            <td>Name 2</td>
+            <td>Level 2</td>
+            <td>Location 1</td>
+        </tr>
+
+        <script type="text/javascript">
+            (function($) {
+
+            $.fn.ddTableFilter = function(options) {
+            options = $.extend(true, $.fn.ddTableFilter.defaultOptions, options);
+            
+            return this.each(function() {
+                if($(this).hasClass('ddtf-processed')) {
+                refreshFilters(this);
+                return;
+                }
+                var table = $(this);
+                var start = new Date();
+            
+                $('th:visible', table).each(function(index) {
+                if($(this).hasClass('skip-filter')) return;
+                var selectbox = $('<select class="form-control">');
+                var values = [];
+                var opts = [];
+                selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
+            
+                var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function() {
+                    var cellVal = options.valueCallback.apply(this);
+                    if(cellVal.length == 0) {
+                    cellVal = '--empty--';
+                    }
+                    $(this).attr('ddtf-value', cellVal);
+            
+                    if($.inArray(cellVal, values) === -1) {
+                    var cellText = options.textCallback.apply(this);
+                    if(cellText.length == 0) {cellText = options.emptyText;}
+                    values.push(cellVal);
+                    opts.push({val:cellVal, text:cellText});
+                    }
+                });
+                if(opts.length < options.minOptions){
+                    return;
+                }
+                if(options.sortOpt) {
+                    opts.sort(options.sortOptCallback);
+                }
+                $.each(opts, function() {
+                    $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
+                });
+            
+                $(this).wrapInner('<div style="display:none">');
+                $(this).append(selectbox);
+            
+                selectbox.bind('change', {column:col}, function(event) {
+                    var changeStart = new Date();
+                    var value = $(this).val();
+            
+                    event.data.column.each(function() {
+                    if($(this).attr('ddtf-value') === value || value == '--all--') {
+                        $(this).removeClass('ddtf-filtered');
+                    }
+                    else {
+                        $(this).addClass('ddtf-filtered');
+                    }
+                    });
+                    var changeStop = new Date();
+                    if(options.debug) {
+                    console.log('Search: ' + (changeStop.getTime() - changeStart.getTime()) + 'ms');
+                    }
+                    refreshFilters(table);
+            
+                });
+                table.addClass('ddtf-processed');
+                if($.isFunction(options.afterBuild)) {
+                    options.afterBuild.apply(table);
+                }
+                });
+            
+                function refreshFilters(table) {
+                var refreshStart = new Date();
+                $('tr', table).each(function() {
+                    var row = $(this);
+                    if($('td.ddtf-filtered', row).length > 0) {
+                    options.transition.hide.apply(row, options.transition.options);
+                    }
+                    else {
+                    options.transition.show.apply(row, options.transition.options);
+                    }
+                });
+            
+                if($.isFunction(options.afterFilter)) {
+                    options.afterFilter.apply(table);
+                }
+            
+                if(options.debug) {
+                    var refreshEnd = new Date();
+                    console.log('Refresh: ' + (refreshEnd.getTime() - refreshStart.getTime()) + 'ms');
+                }
+                }
+            
+                if(options.debug) {
+                var stop = new Date();
+                console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
+                }
+            });
+            };
+            
+            $.fn.ddTableFilter.defaultOptions = {
+            valueCallback:function() {
+                return encodeURIComponent($.trim($(this).text()));
+            },
+            textCallback:function() {
+                return $.trim($(this).text());
+            },
+            sortOptCallback: function(a, b) {
+                return a.text.toLowerCase() > b.text.toLowerCase();
+            },
+            afterFilter: null,
+            afterBuild: null,
+            transition: {
+                hide:$.fn.hide,
+                show:$.fn.show,
+                options: []
+            },
+            emptyText:'--Empty--',
+            sortOpt:true,
+            debug:false,
+            minOptions:2
+            }
+            
+            })(jQuery);
+            
+
+
+            $('table').ddTableFilter();
+        </script>
+    </tbody>
+</table>
+
+
+
+
+<!-- <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="ddtf.js"></script>
+
+<script>
+
+$(document).ready(function() {
+  $("table th").click(function() {
+    showFilterOption(this);
+  });
+});
+
+var arrayMap = {};
+
+function showFilterOption(tdObject) {
+  var filterGrid = $(tdObject).find(".filter");
+
+  if (filterGrid.is(":visible")) {
+    filterGrid.hide();
+    return;
+  }
+
+  $(".filter").hide();
+
+  var index = 0;
+  filterGrid.empty();
+  var allSelected = true;
+  filterGrid.append(
+    '<div><input id="all" type="checkbox" style="width: 10% !important" checked>All</div>'
+  );
+
+  var $rows = $(tdObject).parents("table").find("tr");
+  var values = [];
+
+  $rows.each(function(ind, ele) {
+    if (ind > 0) {
+      var currentTd = $(ele).children()[$(tdObject).attr("index")];
+      if (!values.includes(currentTd.innerHTML)) {
+        values.push(currentTd.innerHTML);
+        var div = document.createElement("div");
+        div.classList.add("grid-item");
+        var str = $(ele).is(":visible") ? "checked" : "";
+        if ($(ele).is(":hidden")) {
+          allSelected = false;
+        }
+        div.innerHTML =
+          '<br><input type="checkbox" ' + str + " >" + currentTd.innerHTML;
+        filterGrid.append(div);
+        arrayMap[index] = ele;
+        index++;
+      }
+    }
+  });
+
+  if (!allSelected) {
+    filterGrid.find("#all").removeAttr("checked");
+  }
+
+  filterGrid.append(
+    '<div style="text-align: center"><input id="close" type="button" value="Close" style="width: 40%"/><input id="ok" type="button" value="Ok" style="width: 40%"/></div>'
+  );
+  filterGrid.show();
+
+  var $closeBtn = filterGrid.find("#close");
+  var $okBtn = filterGrid.find("#ok");
+  var $checkElems = filterGrid.find("input[type='checkbox']");
+  var $gridItems = filterGrid.find(".grid-item");
+  var $all = filterGrid.find("#all");
+
+  $closeBtn.click(function() {
+    filterGrid.hide();
+    return false;
+  });
+
+  $okBtn.click(function() {
+    filterGrid.find(".grid-item").each(function(ind, ele) {
+      if ($(ele).find("input").is(":checked")) {
+        $(arrayMap[ind]).show();
+      } else {
+        $(arrayMap[ind]).hide();
+      }
+    });
+    filterGrid.hide();
+    return false;
+  });
+
+  $checkElems.click(function(event) {
+    event.stopPropagation();
+  });
+
+  $gridItems.click(function(event) {
+    var chk = $(this).find("input[type='checkbox']");
+    $(chk).prop("checked", !$(chk).is(":checked"));
+  });
+
+  $all.change(function() {
+    var chked = $(this).is(":checked");
+    filterGrid.find(".grid-item [type='checkbox']").prop("checked", chked);
+  });
+
+  filterGrid.click(function(event) {
+    event.stopPropagation();
+  });
+
+  return filterGrid;
+} -->
+
+
+
+
+
+
+
+
+
+
+
+
